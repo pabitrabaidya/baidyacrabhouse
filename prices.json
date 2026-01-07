@@ -1,0 +1,77 @@
+{
+  "last_updated": "2026-01-07",
+  "currency": "INR",
+  "products": [
+    {
+      "id": "mud_crab_male",
+      "name": "Mud Crab — Male",
+      "price": null,
+      "unit": "₹ / kg",
+      "grades": {
+        "XXL500": 799,
+        "XL400": 699,
+        "L300": 599,
+        "M200": 499,
+        "SM150": 399,
+        "SSM100": 389,
+        "80_UP": 299
+      }
+    },
+    {
+      "id": "mud_crab_female",
+      "name": "Mud Crab — Female",
+      "price": null,
+      "unit": "₹ / kg",
+      "grades": {
+        "F1": 180,
+        "F2": 150,
+        "F3": 100
+      }
+    },
+    {
+      "id": "green_crab",
+      "name": "Green Crab",
+      "price": 650,
+      "unit": "₹ / kg",
+      "grades": {
+        "S": 600,
+        "M": 650,
+        "L": 700,
+        "XL": 750
+      }
+    },
+    {
+      "id": "crab_egg",
+      "name": "Crab Egg",
+      "price": 250,
+      "unit": "₹ / pack"
+    },
+    {
+      "id": "blue_crab",
+      "name": "Blue Crab",
+      "price": 600,
+      "unit": "₹ / kg",
+      "grades": {
+        "S": 550,
+        "M": 600,
+        "L": 650,
+        "XL": 700,
+        "XXL": 750
+      }
+    },
+    {
+      "id": "sea_crab",
+      "name": "Sea Crab",
+      "price": 700,
+      "unit": "₹ / kg",
+      "grades": {
+        "S": 650,
+        "M": 700,
+        "L": 750,
+        "XL": 800
+      }
+    }
+  ]
+}
+
+
