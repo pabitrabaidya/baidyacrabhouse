@@ -886,8 +886,50 @@ body {
   .hero-text h2 { font-size: 20px; }
   .hero-text p { font-size: 14px; }
   .cta-row .btn, .cta-row .btn.secondary { font-size: 14px; padding: 10px 12px; }
-  /* Stack CTAs on very small phones to avoid cramped layout */
-  .cta-row { flex-direction: column; gap: 8px; }
-  .cta-row .btn, .cta-row .btn.secondary { width: 100%; max-width: none; }
+  /* Keep CTAs side-by-side on very small phones; allow wrapping if needed */
+  .cta-row { flex-direction: row; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .cta-row .btn, .cta-row .btn.secondary { width: auto; flex: 1 1 0; min-width: 100px; }
+}
+/* ===============================
+   MOBILE FIX PATCH (SAFE)
+   =============================== */
+
+/* Fix hero height issue on mobile */
+@media (max-width: 480px) {
+  .hero {
+    min-height: calc(100vh - 92px);
+    justify-content: flex-start;
+  }
+}
+
+/* Normalize CTA buttons on mobile */
+@media (max-width: 480px) {
+  .cta-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .cta-row .btn,
+  .cta-row .btn.secondary {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* Leave CTAs side-by-side on very small phones */
+@media (max-width: 375px) {
+  .cta-row {
+    flex-direction: row;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .cta-row .btn,
+  .cta-row .btn.secondary {
+    width: auto;
+    flex: 1 1 0;
+    min-width: 100px;
+  }
 }
 
