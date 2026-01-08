@@ -852,7 +852,7 @@ body {
 
   .hero { padding: 18px; }
   .hero-text h2 { font-size: 24px; }
-  .nav-brand .nav-brand-text { display: inline-block; font-size: 13px; margin-left: 6px; white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; }
+  .nav-brand .nav-brand-text { display: inline-block; font-size: 12px; margin-left: 6px; white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; }
   .nav-toggle { font-size: 22px; }
 
   /* Small phones: show Order and View buttons side-by-side */
@@ -890,3 +890,4 @@ body {
   .cta-row { flex-direction: column; gap: 8px; }
   .cta-row .btn, .cta-row .btn.secondary { width: 100%; max-width: none; }
 }
+
