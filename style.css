@@ -933,3 +933,46 @@ body {
   }
 }
 
+/* Footer social icons */
+.footer {
+    text-align: center;
+    padding: 20px 10px;
+    background: #0b3d91;
+    color: #fff;
+}
+
+.footer p {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+}
+
+.social-icons a {
+    color: #fff;
+    font-size: 20px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icons a:hover {
+    transform: scale(1.2);
+}
+
+.social-icons a:hover .fa-facebook-f {
+    color: #1877f2;
+}
+
+.social-icons a:hover .fa-instagram {
+    color: #e4405f;
+}
+
+.social-icons a:hover .fa-youtube {
+    color: #ff0000;
+}
+
+
+
