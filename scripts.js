@@ -1,9 +1,9 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 	const toggle = document.querySelector('.nav-toggle');
 	const links = document.querySelector('.nav-links');
 	if (!toggle || !links) return;
 
-	toggle.addEventListener('click', function(e) {
+	toggle.addEventListener('click', function (e) {
 		e.stopPropagation();
 		links.classList.toggle('active');
 		const expanded = links.classList.contains('active');
@@ -11,15 +11,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 
 	// Close menu when a nav link is clicked
-	document.querySelectorAll('.nav-links a').forEach(function(a) {
-		a.addEventListener('click', function() {
+	document.querySelectorAll('.nav-links a').forEach(function (a) {
+		a.addEventListener('click', function () {
 			links.classList.remove('active');
 			toggle.setAttribute('aria-expanded', 'false');
 		});
 	});
 
 	// Close menu when clicking outside
-	document.addEventListener('click', function(e) {
+	document.addEventListener('click', function (e) {
 		if (!e.target.closest('.navbar')) {
 			links.classList.remove('active');
 			toggle.setAttribute('aria-expanded', 'false');
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 
 	// Trust-bar dismissible: hide if user closed it previously (24h expiry) and allow manual restore
-	(function setupTrustBar(){
+	(function setupTrustBar() {
 		const BAR_KEY = 'tch_trust_hidden';
 		const EXPIRY_MS = 24 * 60 * 60 * 1000; // 24 hours
 		const bar = document.querySelector('.trust-bar');
@@ -40,9 +40,9 @@ document.addEventListener('DOMContentLoaded', function() {
 			btn.setAttribute('aria-label', 'Show announcement');
 			btn.title = 'Show announcement';
 			btn.innerHTML = '⟲';
-			btn.addEventListener('click', function() {
+			btn.addEventListener('click', function () {
 				bar.classList.remove('hidden');
-				try { localStorage.removeItem(BAR_KEY); } catch (e) {}
+				try { localStorage.removeItem(BAR_KEY); } catch (e) { }
 				btn.remove();
 			});
 			document.body.appendChild(btn);
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			const ts = Number(stored);
 			if (Number.isNaN(ts) || (Date.now() - ts) > EXPIRY_MS) {
 				// expired — show bar and remove storage
-				try { localStorage.removeItem(BAR_KEY); } catch (e) {}
+				try { localStorage.removeItem(BAR_KEY); } catch (e) { }
 			} else {
 				// still within expiry — hide and show small restore button
 				bar.classList.add('hidden');
@@ -64,9 +64,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		const btn = bar.querySelector('.trust-close');
 		if (btn) {
-			btn.addEventListener('click', function(){
+			btn.addEventListener('click', function () {
 				bar.classList.add('hidden');
-				try { localStorage.setItem(BAR_KEY, String(Date.now())); } catch (e) {}
+				try { localStorage.setItem(BAR_KEY, String(Date.now())); } catch (e) { }
 				createTrustShowButton();
 			});
 		}
@@ -109,10 +109,10 @@ document.addEventListener('DOMContentLoaded', function() {
 				if (priceEl) {
 					priceEl.classList.remove('skeleton');
 					// If the product has grade-specific pricing, show a hint
-				if (p.grades && typeof p.grades === 'object') {
+					if (p.grades && typeof p.grades === 'object') {
 						const lang = (document.documentElement && document.documentElement.lang) ? document.documentElement.lang : 'en';
-					const priceDependsMsg = lang && lang.startsWith('bn') ? 'মূল্য গ্রেড-এর উপর নির্ভর করে' : 'Price depends on grade';
-					priceEl.textContent = priceDependsMsg;
+						const priceDependsMsg = lang && lang.startsWith('bn') ? 'মূল্য গ্রেড-এর উপর নির্ভর করে' : 'Price depends on grade';
+						priceEl.textContent = priceDependsMsg;
 						priceEl.classList.remove('price-unavailable');
 					} else if (p.price == null) {
 						priceEl.textContent = 'Price unavailable';
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// Set up WhatsApp order links per product (requires product data to know if grade is required)
 	function setupOrderLinks(products) {
-		document.querySelectorAll('.product-card').forEach(function(card) {
+		document.querySelectorAll('.product-card').forEach(function (card) {
 			const pid = card.dataset.id;
 			const titleEl = card.querySelector('h3');
 			const title = titleEl ? titleEl.textContent.trim() : (pid || 'product');
@@ -168,14 +168,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			// If product defines grade-based pricing, require the user to select a grade first
 			if (p && p.grades) {
-			const existingHref = anchor.getAttribute('href') || '';
-			const linksToProductPage = /products\.html/i.test(existingHref) || existingHref.startsWith('#') || existingHref.includes('products.html#');
-			anchor.dataset.requiresGrade = 'true';
-			// store base message for later
-			anchor.dataset.baseMessage = baseMessage;
-			// allow certain products to be ordered without selecting a grade
-			const allowOrderWithoutGrade = ['mud_crab_male','mud_crab_female'].includes(pid);
-			if (linksToProductPage) {
+				const existingHref = anchor.getAttribute('href') || '';
+				const linksToProductPage = /products\.html/i.test(existingHref) || existingHref.startsWith('#') || existingHref.includes('products.html#');
+				anchor.dataset.requiresGrade = 'true';
+				// store base message for later
+				anchor.dataset.baseMessage = baseMessage;
+				// allow certain products to be ordered without selecting a grade
+				const allowOrderWithoutGrade = ['mud_crab_male', 'mud_crab_female'].includes(pid);
+				if (linksToProductPage) {
 					// If we're on the index (or any page that is not products.html), make the Order button go directly to WhatsApp
 					const onProductPage = /products\.html/i.test(window.location.pathname);
 					if (!onProductPage) {
@@ -197,25 +197,25 @@ document.addEventListener('DOMContentLoaded', function() {
 						anchor.setAttribute('title', 'Select size/grade on the product page to order');
 						anchor.dataset.goToProductPage = 'true';
 					}
-			} else if (allowOrderWithoutGrade) {
-				// keep anchor enabled for allowed products (WhatsApp link) even without grade selection
-				anchor.classList.remove('disabled');
-				anchor.removeAttribute('aria-disabled');
-				anchor.removeAttribute('tabindex');
-				anchor.dataset.allowOrderWithoutGrade = 'true';
-				// ensure href exists (use existing href if present, otherwise use base WhatsApp message)
-				if (!existingHref || !/whatsapp\.com/i.test(existingHref)) {
-					anchor.setAttribute('href', `https://api.whatsapp.com/send?phone=${number}&text=${encodeURIComponent(baseMessage)}`);
+				} else if (allowOrderWithoutGrade) {
+					// keep anchor enabled for allowed products (WhatsApp link) even without grade selection
+					anchor.classList.remove('disabled');
+					anchor.removeAttribute('aria-disabled');
+					anchor.removeAttribute('tabindex');
+					anchor.dataset.allowOrderWithoutGrade = 'true';
+					// ensure href exists (use existing href if present, otherwise use base WhatsApp message)
+					if (!existingHref || !/whatsapp\.com/i.test(existingHref)) {
+						anchor.setAttribute('href', `https://api.whatsapp.com/send?phone=${number}&text=${encodeURIComponent(baseMessage)}`);
+					}
+					anchor.setAttribute('target', '_blank');
+					anchor.setAttribute('rel', 'noopener noreferrer');
+				} else {
+					// disable anchor until a valid grade is selected
+					anchor.classList.add('disabled');
+					anchor.setAttribute('aria-disabled', 'true');
+					anchor.removeAttribute('href');
+					anchor.setAttribute('tabindex', '-1');
 				}
-				anchor.setAttribute('target', '_blank');
-				anchor.setAttribute('rel', 'noopener noreferrer');
-			} else {
-				// disable anchor until a valid grade is selected
-				anchor.classList.add('disabled');
-				anchor.setAttribute('aria-disabled', 'true');
-				anchor.removeAttribute('href');
-				anchor.setAttribute('tabindex', '-1');
-			}
 			} else {
 				anchor.classList.remove('disabled');
 				anchor.removeAttribute('aria-disabled');
@@ -227,68 +227,163 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 		});
 	}
-	setupImageSwitchers();
+	setupImageCarousels();
 
-	// Image switcher — thumbnails swap main image and update weight display
-	function setupImageSwitchers() {
-		document.querySelectorAll('.image-switcher').forEach(function(switcher) {
-			const thumbs = Array.from(switcher.querySelectorAll('.thumb'));
-			const parent = switcher.closest('.product-card') || document;
-			const main = parent.querySelector('.main-img') || parent.querySelector('img');
-			const weightEl = parent.querySelector('.weight');
-			thumbs.forEach(function(btn) {
-				btn.addEventListener('click', function() {
-					const src = btn.getAttribute('data-src');
-					const weight = btn.getAttribute('data-weight') || '';
-					if (main && src) main.setAttribute('src', src);
-					if (weightEl && weight) {
-						// keep label language already present in HTML
-						if (weightEl.textContent.trim().startsWith('ওজন')) weightEl.textContent = 'ওজন: ' + weight;
-						else weightEl.textContent = 'Weight: ' + weight;
-					}
-					thumbs.forEach(t => t.classList.remove('selected'));
-					btn.classList.add('selected');
+	// ── Image Carousel ──────────────────────────────────────────
+	// Reads data-images attribute (JSON array) OR collects existing
+	// .thumb[data-src] buttons (then removes them), builds arrows +
+	// dots, auto-advances every AUTO_MS ms, pauses on hover.
+	function setupImageCarousels() {
+		const AUTO_MS = 7000;
+
+		document.querySelectorAll('.product-card').forEach(function (card) {
+			// Collect images from thumb buttons (then remove the strip)
+			const thumbStrip = card.querySelector('.thumbs.image-switcher');
+			const mainImg = card.querySelector('.main-img');
+			if (!mainImg) return;
+
+			let slides = []; // [{src, weight}]
+
+			if (thumbStrip) {
+				thumbStrip.querySelectorAll('.thumb[data-src]').forEach(function (btn) {
+					slides.push({
+						src: btn.getAttribute('data-src'),
+						weight: btn.getAttribute('data-weight') || ''
+					});
 				});
+				thumbStrip.remove(); // remove manual thumbs from DOM
+			}
+
+			// Fallback: single image only
+			if (slides.length === 0) {
+				slides.push({ src: mainImg.getAttribute('src'), weight: '' });
+			}
+
+			if (slides.length <= 1) return; // nothing to carousel
+
+			// Find the media container (prefer .product-media, else card itself)
+			const mediaEl = card.querySelector('.product-media') || card;
+
+			let current = 0;
+			const weightEl = card.querySelector('.weight');
+
+			// ── Helper: go to slide index ──
+			function goTo(idx) {
+				current = (idx + slides.length) % slides.length;
+				mainImg.style.opacity = '0';
+				setTimeout(function () {
+					mainImg.setAttribute('src', slides[current].src);
+					mainImg.style.opacity = '1';
+					if (weightEl && slides[current].weight && slides[current].weight !== '..') {
+						const lang = (document.documentElement && document.documentElement.lang) ? document.documentElement.lang : 'en';
+						const label = lang && lang.startsWith('bn') ? 'ওজন: ' : 'Weight: ';
+						weightEl.textContent = label + slides[current].weight;
+					}
+					// Update dots
+					dots.forEach(function (d, i) {
+						d.classList.toggle('active', i === current);
+					});
+				}, 250); // increased slightly for smoother fade out/in
+			}
+
+			// ── Prev / Next arrows ──
+			function makeArrow(dir) {
+				const btn = document.createElement('button');
+				btn.className = 'carousel-arrow carousel-arrow-' + dir;
+				btn.setAttribute('aria-label', dir === 'prev' ? 'Previous image' : 'Next image');
+				btn.innerHTML = dir === 'prev' ? '&#8249;' : '&#8250;';
+				btn.addEventListener('click', function (e) {
+					e.stopPropagation();
+					resetTimer();
+					goTo(dir === 'prev' ? current - 1 : current + 1);
+				});
+				return btn;
+			}
+			mediaEl.appendChild(makeArrow('prev'));
+			mediaEl.appendChild(makeArrow('next'));
+
+			// ── Dot indicators ──
+			const dotsWrap = document.createElement('div');
+			dotsWrap.className = 'carousel-dots';
+			const dots = slides.map(function (_, i) {
+				const d = document.createElement('button');
+				d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+				d.setAttribute('aria-label', 'Image ' + (i + 1));
+				d.addEventListener('click', function (e) {
+					e.stopPropagation();
+					resetTimer();
+					goTo(i);
+				});
+				dotsWrap.appendChild(d);
+				return d;
 			});
+			mediaEl.appendChild(dotsWrap);
+
+			// ── Auto-slide timer ──
+			let timer = setInterval(function () { goTo(current + 1); }, AUTO_MS);
+			function resetTimer() {
+				clearInterval(timer);
+				timer = setInterval(function () { goTo(current + 1); }, AUTO_MS);
+			}
+
+			// Pause on hover
+			mediaEl.addEventListener('mouseenter', function () { clearInterval(timer); });
+			mediaEl.addEventListener('mouseleave', function () {
+				timer = setInterval(function () { goTo(current + 1); }, AUTO_MS);
+			});
+
+			// Touch swipe support
+			let touchStartX = 0;
+			mediaEl.addEventListener('touchstart', function (e) {
+				touchStartX = e.touches[0].clientX;
+			}, { passive: true });
+			mediaEl.addEventListener('touchend', function (e) {
+				const dx = e.changedTouches[0].clientX - touchStartX;
+				if (Math.abs(dx) > 40) {
+					resetTimer();
+					goTo(dx < 0 ? current + 1 : current - 1);
+				}
+			}, { passive: true });
 		});
 	}
+
 
 	// Update price and order link when a grade/size is selected
 	function setupGradeListeners(products, formatter) {
 		const number = '918016216344';
-		document.querySelectorAll('.product-card').forEach(function(card) {
+		document.querySelectorAll('.product-card').forEach(function (card) {
 			const select = card.querySelector('.grade-select');
 			const anchor = card.querySelector('.order-btn a.btn') || card.querySelector('.btn');
 			const priceEl = card.querySelector('.price');
 			const pid = card.dataset.id;
 			if (!select) return;
 
-			const update = function() {
+			const update = function () {
 				const grade = select.value;
 				// find product info
 				const p = products.find(x => x.id === pid);
-// localized message when price depends on grade
-			const lang = (document.documentElement && document.documentElement.lang) ? document.documentElement.lang : 'en';
-			const priceDependsMsg = lang && lang.startsWith('bn') ? 'মূল্য গ্রেড-এর উপর নির্ভর করে' : 'Price depends on grade';
-			// update price based on grade-specific pricing if available
-			if (p && p.grades && typeof p.grades === 'object') {
-				if (grade && p.grades[grade] != null) {
-					let val = p.grades[grade];
-					try {
-						priceEl.textContent = formatter.format(val) + (p.unit ? ' ' + p.unit : '');
-						priceEl.classList.remove('price-unavailable');
-					} catch (e) {
-						priceEl.textContent = val + (p.unit ? ' ' + p.unit : '');
+				// localized message when price depends on grade
+				const lang = (document.documentElement && document.documentElement.lang) ? document.documentElement.lang : 'en';
+				const priceDependsMsg = lang && lang.startsWith('bn') ? 'মূল্য গ্রেড-এর উপর নির্ভর করে' : 'Price depends on grade';
+				// update price based on grade-specific pricing if available
+				if (p && p.grades && typeof p.grades === 'object') {
+					if (grade && p.grades[grade] != null) {
+						let val = p.grades[grade];
+						try {
+							priceEl.textContent = formatter.format(val) + (p.unit ? ' ' + p.unit : '');
+							priceEl.classList.remove('price-unavailable');
+						} catch (e) {
+							priceEl.textContent = val + (p.unit ? ' ' + p.unit : '');
+						}
+					} else {
+						// no specific grade selected — instruct user that price depends on grade
+						priceEl.textContent = priceDependsMsg;
 					}
+				} else if (p && p.price) {
+					// fallback to product base price
+					priceEl.textContent = formatter.format(p.price) + (p.unit ? ' ' + p.unit : '');
 				} else {
-					// no specific grade selected — instruct user that price depends on grade
 					priceEl.textContent = priceDependsMsg;
-				}
-			} else if (p && p.price) {
-				// fallback to product base price
-				priceEl.textContent = formatter.format(p.price) + (p.unit ? ' ' + p.unit : '');
-			} else {
-				priceEl.textContent = priceDependsMsg;
 				}
 
 				// update order link message to include size/grade if present
@@ -308,21 +403,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
 					// If this anchor requires a grade, only enable it when a valid grade (or fallback) exists
 					const requiresGrade = anchor.dataset && anchor.dataset.requiresGrade === 'true';
-						const allowOrderWithoutGrade = anchor.dataset && anchor.dataset.allowOrderWithoutGrade === 'true';
-						if (requiresGrade) {
-							let enable = false;
-							if (p && p.grades && typeof p.grades === 'object' && p.grades[grade] != null) enable = true;
-							if (!enable && p && p.price != null) enable = true;
-							// special-case: allow ordering without grade for certain products (e.g., male/female mud crab)
-							if (!enable && allowOrderWithoutGrade) enable = true;
+					const allowOrderWithoutGrade = anchor.dataset && anchor.dataset.allowOrderWithoutGrade === 'true';
+					if (requiresGrade) {
+						let enable = false;
+						if (p && p.grades && typeof p.grades === 'object' && p.grades[grade] != null) enable = true;
+						if (!enable && p && p.price != null) enable = true;
+						// special-case: allow ordering without grade for certain products (e.g., male/female mud crab)
+						if (!enable && allowOrderWithoutGrade) enable = true;
 
-							if (enable) {
-								anchor.classList.remove('disabled');
-								anchor.removeAttribute('aria-disabled');
-								anchor.removeAttribute('tabindex');
-								anchor.setAttribute('href', `https://api.whatsapp.com/send?phone=${number}&text=${encodeURIComponent(message)}`);
-								anchor.setAttribute('target', '_blank');
-								anchor.setAttribute('rel', 'noopener noreferrer');
+						if (enable) {
+							anchor.classList.remove('disabled');
+							anchor.removeAttribute('aria-disabled');
+							anchor.removeAttribute('tabindex');
+							anchor.setAttribute('href', `https://api.whatsapp.com/send?phone=${number}&text=${encodeURIComponent(message)}`);
+							anchor.setAttribute('target', '_blank');
+							anchor.setAttribute('rel', 'noopener noreferrer');
 
 
 						} else {
@@ -374,7 +469,61 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	function debounce(fn, wait = 150) {
 		let t;
-		return function(...args) { clearTimeout(t); t = setTimeout(() => fn.apply(this, args), wait); };
+		return function (...args) { clearTimeout(t); t = setTimeout(() => fn.apply(this, args), wait); };
+	}
+
+	// --- Handle search query on products page ---
+	function handleSearch() {
+		const params = new URLSearchParams(window.location.search);
+		const query = params.get('q');
+		if (!query) return;
+
+		const normalizedQuery = query.toLowerCase().trim();
+		const productCards = document.querySelectorAll('.product-card');
+		let foundCount = 0;
+
+		productCards.forEach(card => {
+			const title = card.querySelector('h3, h4')?.textContent.toLowerCase() || '';
+			const desc = card.querySelector('p')?.textContent.toLowerCase() || '';
+			const id = card.dataset.id?.toLowerCase() || '';
+
+			if (title.includes(normalizedQuery) || desc.includes(normalizedQuery) || id.includes(normalizedQuery)) {
+				card.style.display = '';
+				foundCount++;
+			} else {
+				card.style.display = 'none';
+			}
+		});
+
+		// Add a "no results" message if needed
+		const productsSection = document.querySelector('.products');
+		if (productsSection) {
+			let noResultsMsg = document.getElementById('no-results-msg');
+			if (foundCount === 0) {
+				if (!noResultsMsg) {
+					noResultsMsg = document.createElement('div');
+					noResultsMsg.id = 'no-results-msg';
+					noResultsMsg.style.gridColumn = '1 / -1';
+					noResultsMsg.style.textAlign = 'center';
+					noResultsMsg.style.padding = '40px 20px';
+					noResultsMsg.style.fontSize = '1.2rem';
+					noResultsMsg.style.color = 'var(--text-muted)';
+					
+					const lang = document.documentElement.lang || 'en';
+					noResultsMsg.textContent = lang.startsWith('bn') 
+						? `"${query}" এর জন্য কোনো ফলাফল পাওয়া যায়নি।`
+						: `No results found for "${query}".`;
+					
+					productsSection.appendChild(noResultsMsg);
+				}
+			} else if (noResultsMsg) {
+				noResultsMsg.remove();
+			}
+		}
+	}
+
+	if (window.location.pathname.includes('products.html')) {
+		handleSearch();
 	}
 
 	// Run on initial load and on resize (debounced)
