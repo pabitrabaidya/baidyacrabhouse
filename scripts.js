@@ -150,6 +150,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	loadPrices();
 
+	function applyOutOfStockState(card) {
+		const anchor = card.querySelector('.order-btn a.btn') || card.querySelector('.btn');
+		const badge = card.querySelector('.badge');
+		const priceEl = card.querySelector('.price');
+		const select = card.querySelector('.grade-select');
+		if (!card.dataset.outOfStock || card.dataset.outOfStock !== 'true') return;
+
+		if (badge) {
+			const lang = (document.documentElement && document.documentElement.lang) ? document.documentElement.lang : 'en';
+			badge.textContent = lang && lang.startsWith('bn') ? 'স্টক শেষ' : 'Out of Stock';
+		}
+		if (anchor) {
+			anchor.classList.add('disabled');
+			anchor.setAttribute('aria-disabled', 'true');
+			anchor.removeAttribute('href');
+			anchor.setAttribute('tabindex', '-1');
+			anchor.setAttribute('title', 'Out of stock');
+			const lang = (document.documentElement && document.documentElement.lang) ? document.documentElement.lang : 'en';
+			anchor.textContent = lang && lang.startsWith('bn') ? 'স্টক শেষ' : 'Out of Stock';
+		}
+		if (priceEl) {
+			const lang = (document.documentElement && document.documentElement.lang) ? document.documentElement.lang : 'en';
+			priceEl.textContent = lang && lang.startsWith('bn') ? 'স্টক শেষ' : 'Out of Stock';
+		}
+		if (select) select.disabled = true;
+	}
+
 	// Set up WhatsApp order links per product (requires product data to know if grade is required)
 	function setupOrderLinks(products) {
 		document.querySelectorAll('.product-card').forEach(function (card) {
@@ -159,8 +186,12 @@ document.addEventListener('DOMContentLoaded', function () {
 			const anchor = card.querySelector('.order-btn a.btn') || card.querySelector('.btn');
 			const p = products ? products.find(x => x.id === pid) : null;
 			if (!anchor) return;
+			if (card.dataset.outOfStock === 'true') {
+				applyOutOfStockState(card);
+				return;
+			}
 
-			const number = '918016216344';
+			const number = '919382682425';
 			const lang = (document.documentElement && document.documentElement.lang) ? document.documentElement.lang : 'en';
 			const baseMessage = (lang && lang.startsWith('bn'))
 				? `হ্যালো, আমি ${title} অর্ডার করতে চাই। দয়া করে আজকের দাম ও স্টক জানান।`
@@ -264,8 +295,19 @@ document.addEventListener('DOMContentLoaded', function () {
 			// Find the media container (prefer .product-media, else card itself)
 			const mediaEl = card.querySelector('.product-media') || card;
 
-			let current = 0;
+			const selectedThumb = thumbStrip ? Array.from(thumbStrip.querySelectorAll('.thumb')).find(function (button) {
+				return button.classList.contains('selected');
+			}) : null;
+			const initialMatchIndex = selectedThumb
+				? slides.findIndex(function (slide) {
+					return slide.src === selectedThumb.getAttribute('data-src');
+				})
+				: slides.findIndex(function (slide) {
+					return slide.src === mainImg.getAttribute('src');
+				});
+			let current = initialMatchIndex >= 0 ? initialMatchIndex : 0;
 			const weightEl = card.querySelector('.weight');
+			const hasMatchingInitialImage = initialMatchIndex >= 0;
 
 			// ── Helper: go to slide index ──
 			function goTo(idx) {
@@ -320,15 +362,22 @@ document.addEventListener('DOMContentLoaded', function () {
 			mediaEl.appendChild(dotsWrap);
 
 			// ── Auto-slide timer ──
-			let timer = setInterval(function () { goTo(current + 1); }, AUTO_MS);
+			let timer = null;
+			if (hasMatchingInitialImage) {
+				timer = setInterval(function () { goTo(current + 1); }, AUTO_MS);
+			}
 			function resetTimer() {
+				if (!timer) return;
 				clearInterval(timer);
 				timer = setInterval(function () { goTo(current + 1); }, AUTO_MS);
 			}
 
 			// Pause on hover
-			mediaEl.addEventListener('mouseenter', function () { clearInterval(timer); });
+			mediaEl.addEventListener('mouseenter', function () {
+				if (timer) clearInterval(timer);
+			});
 			mediaEl.addEventListener('mouseleave', function () {
+				if (!hasMatchingInitialImage) return;
 				timer = setInterval(function () { goTo(current + 1); }, AUTO_MS);
 			});
 
@@ -350,7 +399,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	// Update price and order link when a grade/size is selected
 	function setupGradeListeners(products, formatter) {
-		const number = '918016216344';
+		const number = '919382682425';
 		document.querySelectorAll('.product-card').forEach(function (card) {
 			const select = card.querySelector('.grade-select');
 			const anchor = card.querySelector('.order-btn a.btn') || card.querySelector('.btn');
@@ -359,6 +408,10 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (!select) return;
 
 			const update = function () {
+				if (card.dataset.outOfStock === 'true') {
+					applyOutOfStockState(card);
+					return;
+				}
 				const grade = select.value;
 				// find product info
 				const p = products.find(x => x.id === pid);

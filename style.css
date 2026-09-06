@@ -1942,6 +1942,13 @@ a {
   line-height: 1.6;
 }
 
+.founder-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin-top: var(--space-16);
+}
+
 .founder-card {
   background: linear-gradient(135deg, var(--brand) 0%, var(--brand-mid) 100%);
   color: #fff;
@@ -1950,8 +1957,11 @@ a {
   display: flex;
   gap: var(--space-12);
   align-items: center;
-  margin-top: var(--space-16);
   box-shadow: var(--shadow-lg);
+}
+
+.founder-card--secondary {
+  background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 100%);
 }
 
 .founder-text h3 {
