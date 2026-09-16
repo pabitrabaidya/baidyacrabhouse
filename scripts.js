@@ -72,6 +72,76 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	})();
 	// --- Load prices.json and populate product prices ---
+	const FALLBACK_PRICES_DATA = {
+		"last_updated": "2026-01-07",
+		"currency": "INR",
+		"products": [
+			{
+				"id": "mud_crab_male",
+				"name": "Mud Crab — Male",
+				"price": null,
+				"unit": " / kg",
+				"grades": {
+					"XXL500": 799,
+					"XL400": 699,
+					"L300": 599,
+					"M200": 499,
+					"SM150": 399,
+					"SSM100": 389,
+					"80_UP": 299
+				}
+			},
+			{
+				"id": "mud_crab_female",
+				"name": "Mud Crab — Female",
+				"price": null,
+				"unit": " / kg",
+				"grades": {
+					"F1": 649,
+					"F2": 649,
+					"F3": 649
+				}
+			},
+			{
+				"id": "green_crab",
+				"name": "Green Crab",
+				"price": 650,
+				"unit": " / kg",
+				"grades": {
+					"S": 550,
+					"M": 650,
+					"L": 750,
+					"XL": 850
+				}
+			},
+			{
+				"id": "blue_crab",
+				"name": "Blue Crab",
+				"price": 600,
+				"unit": " / kg",
+				"grades": {
+					"S": 550,
+					"M": 600,
+					"L": 650,
+					"XL": 700,
+					"XXL": 750
+				}
+			},
+			{
+				"id": "sea_crab",
+				"name": "Sea Crab",
+				"price": 700,
+				"unit": " / kg",
+				"grades": {
+					"S": 650,
+					"M": 700,
+					"L": 750,
+					"XL": 800
+				}
+			}
+		]
+	};
+
 	async function loadPrices() {
 		// show skeleton placeholders while fetching
 		document.querySelectorAll('.price').forEach(el => {
@@ -83,36 +153,50 @@ document.addEventListener('DOMContentLoaded', function () {
 			// Try multiple relative locations for prices.json so pages in subfolders (bn/) work
 			const candidates = ['prices.json', '../prices.json', '../../prices.json'];
 			let res = null;
+			let data = null;
 			for (const path of candidates) {
 				try {
-					// Use no-cache to get fresh rates
 					const attempt = await fetch(path, { cache: 'no-cache' });
 					if (attempt && attempt.ok) {
-						res = attempt;
-						break;
+						const parsed = await attempt.json();
+						if (parsed && parsed.products && Array.isArray(parsed.products)) {
+							res = attempt;
+							data = parsed;
+							break;
+						}
 					}
 				} catch (e) {
-					// ignore and try next
+					// ignore parsing or network error, try next candidate
 				}
 			}
-			if (!res || !res.ok) {
-				console.error('Failed to fetch prices.json from candidate paths');
-				showPricesUnavailable();
-				return;
+			if (!data || !data.products) {
+				console.warn('Network fetch for prices.json blocked or failed. Using embedded fallback prices.');
+				data = FALLBACK_PRICES_DATA;
 			}
-			const data = await res.json();
 			const products = data.products || [];
 			const currency = data.currency || 'INR';
+
+			// Display last updated badge if available
+			const lastUpdatedBadge = document.getElementById('last-updated-badge');
+			if (lastUpdatedBadge && data.last_updated) {
+				const lang = (document.documentElement && document.documentElement.lang) ? document.documentElement.lang : 'en';
+				lastUpdatedBadge.textContent = lang.startsWith('bn')
+					? `📅 সর্বশেষ আপডেট: ${data.last_updated}`
+					: `📅 Prices Updated: ${data.last_updated}`;
+				lastUpdatedBadge.style.display = 'inline-flex';
+			}
+
 			const formatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency, maximumFractionDigits: 0 });
 			products.forEach(p => {
 				const priceEl = document.querySelector(`.product-card[data-id="${p.id}"] .price`);
 				if (priceEl) {
 					priceEl.classList.remove('skeleton');
-					// If the product has grade-specific pricing, show a hint
+					const lang = (document.documentElement && document.documentElement.lang) ? document.documentElement.lang : 'en';
+					// If the product has grade-specific pricing, prompt user to select a grade
 					if (p.grades && typeof p.grades === 'object') {
-						const lang = (document.documentElement && document.documentElement.lang) ? document.documentElement.lang : 'en';
-						const priceDependsMsg = lang && lang.startsWith('bn') ? 'মূল্য গ্রেড-এর উপর নির্ভর করে' : 'Price depends on grade';
-						priceEl.textContent = priceDependsMsg;
+						priceEl.textContent = lang.startsWith('bn')
+							? 'সাইজ/গ্রেড বেছে নিন মূল্য দেখতে'
+							: 'Select size/grade to see price';
 						priceEl.classList.remove('price-unavailable');
 					} else if (p.price == null) {
 						priceEl.textContent = 'Price unavailable';
@@ -136,8 +220,9 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (typeof equalizeProductCardHeights === 'function') equalizeProductCardHeights();
 			console.info('Prices loaded for', products.length, 'products');
 		} catch (err) {
-			console.error('Failed to load prices.json:', err);
-			showPricesUnavailable();
+			console.error('Failed to load prices.json, using fallback:', err);
+			setupOrderLinks(FALLBACK_PRICES_DATA.products);
+			setupGradeListeners(FALLBACK_PRICES_DATA.products, new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }));
 		}
 	}
 
@@ -429,8 +514,10 @@ document.addEventListener('DOMContentLoaded', function () {
 							priceEl.textContent = val + (p.unit ? ' ' + p.unit : '');
 						}
 					} else {
-						// no specific grade selected — instruct user that price depends on grade
-						priceEl.textContent = priceDependsMsg;
+						// no grade selected — prompt user to pick one
+						priceEl.textContent = lang.startsWith('bn')
+							? 'সাইজ/গ্রেড বেছে নিন মূল্য দেখতে'
+							: 'Select size/grade to see price';
 					}
 				} else if (p && p.price) {
 					// fallback to product base price
@@ -577,6 +664,50 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	if (window.location.pathname.includes('products.html')) {
 		handleSearch();
+
+		// Live instant search as user types
+		document.querySelectorAll('.nav-search input').forEach(input => {
+			input.addEventListener('input', function () {
+				const val = this.value.trim().toLowerCase();
+				const cards = document.querySelectorAll('.product-card');
+				let found = 0;
+				cards.forEach(card => {
+					const title = card.querySelector('h3, h4')?.textContent.toLowerCase() || '';
+					const desc = card.querySelector('p')?.textContent.toLowerCase() || '';
+					const id = card.dataset.id?.toLowerCase() || '';
+					if (!val || title.includes(val) || desc.includes(val) || id.includes(val)) {
+						card.style.display = '';
+						found++;
+					} else {
+						card.style.display = 'none';
+					}
+				});
+			});
+		});
+
+		// Category Filter Buttons
+		const filterBtns = document.querySelectorAll('.filter-btn');
+		filterBtns.forEach(btn => {
+			btn.addEventListener('click', function () {
+				filterBtns.forEach(b => b.classList.remove('active'));
+				this.classList.add('active');
+				const filter = this.dataset.filter;
+				const cards = document.querySelectorAll('.product-card');
+				cards.forEach(card => {
+					const isOutOfStock = card.dataset.outOfStock === 'true';
+					const badgeText = card.querySelector('.badge')?.textContent.toLowerCase() || '';
+					if (filter === 'all') {
+						card.style.display = '';
+					} else if (filter === 'live') {
+						card.style.display = (badgeText.includes('live') || badgeText.includes('লাইভ')) ? '' : 'none';
+					} else if (filter === 'fresh') {
+						card.style.display = (badgeText.includes('fresh') || badgeText.includes('ফ্রেশ') || badgeText.includes('তাজা')) ? '' : 'none';
+					} else if (filter === 'in-stock') {
+						card.style.display = !isOutOfStock ? '' : 'none';
+					}
+				});
+			});
+		});
 	}
 
 	// Run on initial load and on resize (debounced)

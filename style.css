@@ -2015,3 +2015,715 @@ a {
     padding: 0 var(--space-6);
   }
 }
+
+/* ============================================================
+   PROMOTIONAL ANNOUNCEMENT & OFFER SECTION
+   ============================================================ */
+.promo-section {
+  padding: var(--space-12) 0;
+  background: linear-gradient(180deg, #f0f6ff 0%, #e5efff 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.promo-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+}
+
+.promo-header {
+  text-align: center;
+  max-width: 860px;
+  margin: 0 auto var(--space-8);
+}
+
+.promo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: linear-gradient(135deg, #e8622a 0%, #ff5722 100%);
+  color: #ffffff;
+  padding: 6px 18px;
+  border-radius: var(--radius-full);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 14px rgba(232, 98, 42, 0.3);
+  margin-bottom: var(--space-3);
+  text-transform: uppercase;
+}
+
+.promo-title {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  color: var(--brand);
+  line-height: 1.25;
+  margin-bottom: var(--space-3);
+}
+
+.promo-brand-subtitle {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.promo-intro {
+  font-size: var(--fs-lg);
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: var(--space-3);
+}
+
+.promo-intro strong {
+  color: var(--brand);
+}
+
+/* Dhamaka Highlight Card */
+.dhamaka-card {
+  background: linear-gradient(135deg, #071e3d 0%, #0d386c 50%, #1a4a8a 100%);
+  color: #ffffff;
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  border: 2px solid rgba(232, 98, 42, 0.4);
+  margin-bottom: var(--space-10);
+  overflow: hidden;
+}
+
+.dhamaka-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(232, 98, 42, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.dhamaka-badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #e8622a;
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.95rem;
+  font-weight: 800;
+  margin-bottom: var(--space-4);
+  box-shadow: 0 4px 12px rgba(232, 98, 42, 0.4);
+}
+
+.dhamaka-headline {
+  font-size: clamp(1.3rem, 2.6vw, 1.85rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: var(--space-4);
+  line-height: 1.35;
+}
+
+.dhamaka-prices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-4);
+  margin: var(--space-6) 0 var(--space-4);
+}
+
+.dhamaka-price-pill {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  transition: transform var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+
+.dhamaka-price-pill:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.dhamaka-price-pill .price-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.dhamaka-price-pill .price-title {
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.85);
+  display: block;
+}
+
+.dhamaka-price-pill .price-val {
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  color: #ffca3a;
+  display: block;
+}
+
+.dhamaka-note {
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.75);
+  font-style: italic;
+  margin-top: var(--space-2);
+}
+
+/* Why Order From Us (6 Feature Cards) */
+.promo-reasons-title {
+  text-align: center;
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  font-weight: 800;
+  color: var(--brand);
+  margin-bottom: var(--space-6);
+}
+
+.promo-reasons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: var(--space-5);
+  margin-bottom: var(--space-10);
+}
+
+.reason-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.reason-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(232, 98, 42, 0.35);
+}
+
+.reason-card.featured-guarantee {
+  border: 2px solid var(--accent);
+  background: linear-gradient(180deg, #ffffff 0%, #fff6f2 100%);
+}
+
+.reason-card .card-icon {
+  font-size: 2rem;
+  margin-bottom: var(--space-3);
+  display: inline-block;
+}
+
+.reason-card h4 {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--brand);
+  margin-bottom: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.reason-card p {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* Delivery Area Section */
+.promo-delivery-box {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-8);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--space-8);
+  text-align: center;
+}
+
+.promo-delivery-box h3 {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  color: var(--brand);
+  margin-bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.promo-delivery-box p {
+  color: var(--text-muted);
+  margin-bottom: var(--space-4);
+}
+
+.delivery-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.delivery-chip {
+  background: var(--bg-alt);
+  color: var(--brand);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(10, 46, 92, 0.12);
+  transition: all var(--dur-fast) var(--ease);
+}
+
+.delivery-chip:hover {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+
+/* Order Steps & CTA Section */
+.promo-order-guide {
+  background: linear-gradient(135deg, #0a2e5c 0%, #1a4a8a 100%);
+  color: #ffffff;
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--space-8);
+}
+
+.promo-order-guide h3 {
+  text-align: center;
+  font-size: var(--fs-2xl);
+  color: #ffffff;
+  margin-bottom: var(--space-6);
+}
+
+.order-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+
+.order-step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  background: rgba(255, 255, 255, 0.08);
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.order-step-num {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(232, 98, 42, 0.4);
+}
+
+.order-step-text strong {
+  color: #fff;
+  font-size: var(--fs-lg);
+  display: block;
+  margin-bottom: var(--space-1);
+}
+
+.order-step-text p {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.promo-cta-box {
+  text-align: center;
+  padding-top: var(--space-4);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.promo-cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.btn-promo-call {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.btn-promo-call:hover {
+  background: var(--accent-hover);
+  color: #ffffff;
+}
+
+.promo-bulk-note {
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.82);
+  margin-top: var(--space-3);
+  font-style: italic;
+}
+
+.promo-closing-tag {
+  margin-top: var(--space-5);
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 8px 20px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  color: #ffca3a;
+  font-size: var(--fs-base);
+}
+
+/* Product page top alert banner */
+.offer-alert-banner {
+  background: linear-gradient(90deg, #e8622a 0%, #cf4f1a 100%);
+  color: #fff;
+  padding: 12px 20px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 8px rgba(232, 98, 42, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.offer-alert-banner strong {
+  color: #fff;
+  text-decoration: underline;
+}
+
+@media (max-width: 767px) {
+  .promo-reasons-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dhamaka-prices {
+    grid-template-columns: 1fr;
+  }
+
+  .dhamaka-card {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .order-steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .promo-order-guide {
+    padding: var(--space-6) var(--space-4);
+  }
+}
+
+/* ==========================================================================
+   UI ENHANCEMENTS & NEW COMPONENTS
+   ========================================================================== */
+
+/* Category Filters & Last Updated Badge */
+.last-updated-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(14, 165, 233, 0.12);
+  color: var(--brand-dark, #0284c7);
+  border: 1px solid rgba(14, 165, 233, 0.25);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin: 6px 0 16px 0;
+}
+
+.category-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  padding: 7px 18px;
+  border-radius: 20px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.filter-btn.active {
+  background: var(--cta, #e8622a);
+  color: #ffffff;
+  border-color: var(--cta, #e8622a);
+  box-shadow: 0 2px 8px rgba(232, 98, 42, 0.3);
+}
+
+/* Floating Mobile WhatsApp Button */
+.floating-whatsapp-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  background: #25d366;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  text-decoration: none;
+}
+
+.floating-whatsapp-btn i {
+  font-size: 1.35rem;
+}
+
+.floating-whatsapp-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6);
+  color: #ffffff;
+}
+
+/* Product Card Polish */
+.product-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+/* About Page Stats Grid & Trust Highlights */
+.stats-section {
+  background: linear-gradient(135deg, #071e3d 0%, #0b3c5d 100%);
+  color: #ffffff;
+  padding: 50px 20px;
+  border-radius: 20px;
+  margin: 40px auto;
+  box-shadow: 0 10px 30px rgba(7, 30, 61, 0.2);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  text-align: center;
+}
+
+.stat-card {
+  padding: 20px 15px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.stat-num {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #f97316;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.about-trust-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 30px 0;
+}
+
+.about-trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1e293b;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.about-trust-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.about-trust-badge span.icon {
+  font-size: 1.2rem;
+}
+
+/* Enhanced About Hero & Journey Section Styling */
+.page-hero-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.about-image-wrapper {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+  border: 4px solid #ffffff;
+}
+
+.about-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.about-image-wrapper:hover img {
+  transform: scale(1.04);
+}
+
+.image-floating-badge {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(7, 30, 61, 0.9);
+  color: #ffffff;
+  padding: 10px 16px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.image-floating-badge .badge-icon {
+  font-size: 1.5rem;
+}
+
+.image-floating-badge strong {
+  display: block;
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+
+.image-floating-badge small {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.78rem;
+}
+
+.section-tag {
+  display: inline-block;
+  color: var(--cta, #e8622a);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.journey-pillars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.pillar-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #f8fafc;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pillar-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: #cbd5e1;
+}
+
+.pillar-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.pillar-item strong {
+  display: block;
+  color: #0f172a;
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+
+.pillar-item p {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+
+
