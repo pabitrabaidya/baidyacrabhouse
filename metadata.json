@@ -1,0 +1,8 @@
+{
+  "name": "Baidya Crab House",
+  "description": "Order live and fresh Sundarban mud crabs online with 100% Ghilu guarantee and superfast home delivery in Kolkata.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

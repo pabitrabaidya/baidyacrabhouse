@@ -1,0 +1,94 @@
+{
+  "last_updated": "2026-10-10",
+  "currency": "INR",
+  "products": [
+    {
+      "id": "mud_crab_female",
+      "name": "Mud Crab — Female (Full Ghilu)",
+      "name_bn": "মাড কাঁকড়া — মহিলা (ঘিলু ভরা)",
+      "price": 699,
+      "starting_price": 699,
+      "price_range": "₹699 – ₹899",
+      "unit": " / kg",
+      "unit_bn": " / কেজি",
+      "in_stock": true,
+      "grades": {
+        "F1": 899,
+        "F2": 799,
+        "F3": 699
+      }
+    },
+    {
+      "id": "mud_crab_male",
+      "name": "Mud Crab — Male",
+      "name_bn": "মাড কাঁকড়া — পুরুষ",
+      "price": 349,
+      "starting_price": 349,
+      "price_range": "₹349 – ₹1,099",
+      "unit": " / kg",
+      "unit_bn": " / কেজি",
+      "in_stock": true,
+      "grades": {
+        "XXL500": 1099,
+        "XL400": 999,
+        "L300": 699,
+        "M200": 599,
+        "SM150": 499,
+        "SSM100": 449,
+        "80_UP": 349
+      }
+    },
+    {
+      "id": "green_crab",
+      "name": "Green Crab",
+      "name_bn": "সবুজ কাঁকড়া",
+      "price": 650,
+      "starting_price": 550,
+      "price_range": "₹550 – ₹850",
+      "unit": " / kg",
+      "unit_bn": " / কেজি",
+      "in_stock": true,
+      "grades": {
+        "S": 550,
+        "M": 650,
+        "L": 750,
+        "XL": 850
+      }
+    },
+    {
+      "id": "blue_crab",
+      "name": "Blue Crab",
+      "name_bn": "নীল কাঁকড়া",
+      "price": 600,
+      "starting_price": 550,
+      "price_range": "₹550 – ₹750",
+      "unit": " / kg",
+      "unit_bn": " / কেজি",
+      "in_stock": false,
+      "grades": {
+        "S": 550,
+        "M": 600,
+        "L": 650,
+        "XL": 700,
+        "XXL": 750
+      }
+    },
+    {
+      "id": "sea_crab",
+      "name": "Sea Crab",
+      "name_bn": "সি কাঁকড়া",
+      "price": 700,
+      "starting_price": 650,
+      "price_range": "₹650 – ₹800",
+      "unit": " / kg",
+      "unit_bn": " / কেজি",
+      "in_stock": false,
+      "grades": {
+        "S": 650,
+        "M": 700,
+        "L": 750,
+        "XL": 800
+      }
+    }
+  ]
+}
