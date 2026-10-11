@@ -1,10 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
-  "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
+    {
+      "source": "/api/reviews",
+      "destination": "/api/reviews.js"
+    },
     {
       "source": "/bn",
       "destination": "/bn/index.html"
@@ -12,7 +15,7 @@
   ],
   "functions": {
     "api/reviews.js": {
-      "includeFiles": "reviews.json",
+      "includeFiles": "public/reviews.json",
       "maxDuration": 10
     }
   },

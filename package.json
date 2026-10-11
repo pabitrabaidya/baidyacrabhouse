@@ -5,9 +5,9 @@
   "description": "Live and fresh Sundarban mud crabs online delivery in Kolkata",
   "type": "module",
   "scripts": {
-    "dev": "node dev-server.js",
+    "dev": "node server.js",
     "build": "echo 'Ready'",
-    "start": "node dev-server.js"
+    "start": "node server.js"
   },
   "engines": {
     "node": ">=18.x"

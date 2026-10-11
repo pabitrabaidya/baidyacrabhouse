@@ -10,29 +10,32 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const HOST = '0.0.0.0';
 
-// Body parser for JSON
 app.use(express.json());
 
-// API route for reviews
+// API routes
 app.all('/api/reviews', reviewsHandler);
 
-// Serve static files (HTML, CSS, JS, images, JSON, etc.)
-app.use(express.static(__dirname, {
+// Serve static assets from public/ locally
+app.use(express.static(path.join(__dirname, 'public'), {
   extensions: ['html', 'htm'],
   index: 'index.html'
 }));
 
 // Route fallback for /
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Route fallback for /bn
 app.get('/bn', (req, res) => {
-  res.sendFile(path.join(__dirname, 'bn', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'bn', 'index.html'));
 });
 
-// Start local development server
-app.listen(Number(PORT), HOST, () => {
-  console.log(`Baidya Crab House local dev server running on http://${HOST}:${PORT}`);
-});
+// Start local development server when run directly
+if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+  app.listen(Number(PORT), HOST, () => {
+    console.log(`Baidya Crab House server running on http://${HOST}:${PORT}`);
+  });
+}
+
+export default app;

@@ -9,11 +9,13 @@ function getCandidatePaths() {
   const candidates = [];
   // 1. /tmp/reviews.json (persistent across warm lambda invocations in serverless)
   candidates.push(path.join('/tmp', 'reviews.json'));
-  // 2. process.cwd() / reviews.json (project root in Vercel environment)
+  // 2. process.cwd() / reviews.json & process.cwd() / public / reviews.json
+  candidates.push(path.join(process.cwd(), 'public', 'reviews.json'));
   candidates.push(path.join(process.cwd(), 'reviews.json'));
   // 3. Relative to this file
   try {
     const currentDir = path.dirname(fileURLToPath(import.meta.url));
+    candidates.push(path.join(currentDir, '..', 'public', 'reviews.json'));
     candidates.push(path.join(currentDir, '..', 'reviews.json'));
     candidates.push(path.join(currentDir, 'reviews.json'));
   } catch (e) {}
@@ -155,6 +157,9 @@ export default async function handler(req, res) {
       const serialized = JSON.stringify(reviewsData, null, 2);
       try {
         fs.writeFileSync(path.join('/tmp', 'reviews.json'), serialized);
+      } catch (err) {}
+      try {
+        fs.writeFileSync(path.join(process.cwd(), 'public', 'reviews.json'), serialized);
       } catch (err) {}
       try {
         fs.writeFileSync(path.join(process.cwd(), 'reviews.json'), serialized);

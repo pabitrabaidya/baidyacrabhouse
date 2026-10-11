@@ -2,8 +2,6 @@
 .gitignore
 .vercel
 node_modules/
-dev-server.js
-server.js
 requirements.txt
 metadata.json
 *.log
