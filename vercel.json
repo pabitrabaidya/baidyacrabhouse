@@ -9,14 +9,6 @@
       "destination": "/api/prices.js"
     },
     {
-      "source": "/api/admin/session",
-      "destination": "/api/admin-session.js"
-    },
-    {
-      "source": "/api/admin/prices",
-      "destination": "/api/admin-prices.js"
-    },
-    {
       "source": "/api/reviews",
       "destination": "/api/reviews.js"
     },

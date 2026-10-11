@@ -18,8 +18,8 @@ app.use(express.json({ limit: '32kb' }));
 // API routes
 app.all('/api/reviews', reviewsHandler);
 app.all('/api/prices', pricesHandler);
-app.all('/api/admin/session', adminSessionHandler);
-app.all('/api/admin/prices', adminPricesHandler);
+app.all('/api/admin-session', adminSessionHandler);
+app.all('/api/admin-prices', adminPricesHandler);
 
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));

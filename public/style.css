@@ -2058,6 +2058,9 @@ html[lang="bn"] .page-hero p {
 .admin-page {
   background: var(--bg-page);
 }
+.admin-page [hidden] {
+  display: none !important;
+}
 .admin-shell {
   width: min(920px, calc(100% - 2rem));
   margin: 2.5rem auto;

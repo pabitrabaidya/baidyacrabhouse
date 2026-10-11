@@ -27,6 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ...options.headers
       }
     });
+    if (!response.headers.get('content-type')?.includes('application/json')) {
+      throw new Error(`The server returned an unexpected response (HTTP ${response.status}).`);
+    }
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || 'The request could not be completed.');
     return data;
@@ -95,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function loadPrices() {
-    const data = await requestJson('/api/admin/prices');
+    const data = await requestJson('/api/admin-prices');
     renderProducts(data);
     loginPanel.hidden = true;
     setupPanel.hidden = true;
@@ -105,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function checkSession() {
     try {
-      const session = await requestJson('/api/admin/session');
+      const session = await requestJson('/api/admin-session');
       if (!session.configured) {
         setupPanel.hidden = false;
         return;
@@ -127,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitButton = loginForm.querySelector('button[type="submit"]');
     submitButton.disabled = true;
     try {
-      await requestJson('/api/admin/session', {
+      await requestJson('/api/admin-session', {
         method: 'POST',
         body: JSON.stringify({ password: passwordInput.value })
       });
@@ -161,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     saveButton.disabled = true;
     setStatus('Saving updates…');
     try {
-      const result = await requestJson('/api/admin/prices', {
+      const result = await requestJson('/api/admin-prices', {
         method: 'PUT',
         body: JSON.stringify({ products })
       });
@@ -177,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
   logoutButton.addEventListener('click', async () => {
     logoutButton.disabled = true;
     try {
-      await requestJson('/api/admin/session', { method: 'DELETE' });
+      await requestJson('/api/admin-session', { method: 'DELETE' });
       pricesPanel.hidden = true;
       logoutButton.hidden = true;
       loginPanel.hidden = false;
