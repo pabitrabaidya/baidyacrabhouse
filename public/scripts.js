@@ -622,11 +622,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnFetch = document.getElementById('btnFetchNewest');
     const btnInterchange = document.getElementById('btnInterchangeReviews');
     const btnAutoRotate = document.getElementById('btnToggleAutoRotate');
-    const btnOpenModal = document.getElementById('btnOpenWriteReview');
-    const btnCloseModal = document.getElementById('btnCloseReviewModal');
-    const btnCancelModal = document.getElementById('btnCancelReview');
-    const reviewModal = document.getElementById('reviewModal');
-    const writeReviewForm = document.getElementById('writeReviewForm');
     const toast = document.getElementById('reviewToast');
     const toastMsg = document.getElementById('reviewToastMessage');
     const filterPills = document.querySelectorAll('.reviews-filter-pills .review-pill');
@@ -982,116 +977,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (btnInterchange) {
       btnInterchange.addEventListener('click', () => interchangeReviews(true));
-    }
-
-    // Write Review Modal Logic
-    if (btnOpenModal && reviewModal) {
-      btnOpenModal.addEventListener('click', () => {
-        reviewModal.classList.add('open');
-        reviewModal.setAttribute('aria-hidden', 'false');
-      });
-    }
-
-    function closeModal() {
-      if (!reviewModal) return;
-      reviewModal.classList.remove('open');
-      reviewModal.setAttribute('aria-hidden', 'true');
-    }
-
-    if (btnCloseModal) btnCloseModal.addEventListener('click', closeModal);
-    if (btnCancelModal) btnCancelModal.addEventListener('click', closeModal);
-
-    // Star rating picker
-    const starBtns = document.querySelectorAll('#starRatingSelector .star-rating-btn');
-    const ratingInput = document.getElementById('reviewRatingInput');
-    starBtns.forEach(btn => {
-      btn.addEventListener('click', function () {
-        const rating = parseInt(this.dataset.rating, 10);
-        if (ratingInput) ratingInput.value = String(rating);
-        starBtns.forEach(b => {
-          const bRating = parseInt(b.dataset.rating, 10);
-          if (bRating <= rating) b.classList.add('active');
-          else b.classList.remove('active');
-        });
-      });
-    });
-
-    // Write Review Form Submit
-    if (writeReviewForm) {
-      writeReviewForm.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        const author = document.getElementById('reviewAuthorInput')?.value.trim();
-        const location = document.getElementById('reviewLocationInput')?.value.trim();
-        const variety = document.getElementById('reviewVarietyInput')?.value;
-        const quote = document.getElementById('reviewQuoteInput')?.value.trim();
-        const rating = parseInt(ratingInput?.value || '5', 10);
-
-        if (!author || !quote) return;
-
-        const initials = author.split(' ').map(s => s[0]).join('').slice(0, 2).toUpperCase() || 'KH';
-        const newRev = {
-          id: 'rev-user-' + Date.now(),
-          author,
-          author_bn: author,
-          initials,
-          location: location || (isBn ? 'কলকাতা ক্রেতা' : 'Kolkata Customer'),
-          location_bn: location || (isBn ? 'কলকাতা ক্রেতা' : 'Kolkata Customer'),
-          rating,
-          date: new Date().toISOString(),
-          date_display: isBn ? 'এইমাত্র' : 'Just now',
-          date_display_bn: 'এইমাত্র',
-          order_tag: variety || (isBn ? 'তাজা কাঁকড়া' : 'Fresh Crabs'),
-          order_tag_bn: variety || (isBn ? 'তাজা কাঁকড়া' : 'Fresh Crabs'),
-          category: 'general',
-          quote,
-          quote_bn: quote,
-          verified: true,
-          color: 'teal',
-          is_new: true
-        };
-
-        // Try posting to API
-        try {
-          await fetch('/api/reviews', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newRev)
-          });
-        } catch (err) {}
-
-        // Save locally
-        const existingLocal = loadSavedUserReviews();
-        existingLocal.unshift(newRev);
-        try {
-          localStorage.setItem('bch_user_reviews', JSON.stringify(existingLocal));
-        } catch (e) {}
-
-        // Add to active array at the very top
-        allReviews.unshift(newRev);
-        currentFilter = 'all';
-
-        // Reset view to "All Reviews"
-        const btnViewAllEl = document.getElementById('btnViewAll');
-        if (btnViewAllEl) btnViewAllEl.classList.add('active');
-        if (btnFetch) btnFetch.classList.remove('active');
-
-        // Re-render reviews
-        renderReviews(getFilteredList(), true);
-
-        // Reset form & close
-        writeReviewForm.reset();
-        starBtns.forEach(b => b.classList.add('active'));
-        if (ratingInput) ratingInput.value = '5';
-        closeModal();
-
-        showToast(isBn ? 'ধন্যবাদ! আপনার রিভিউ যোগ করা হয়েছে এবং সবার উপরে প্রদর্শিত হচ্ছে।' : 'Thank you! Your review was published and is shown at the top.');
-
-        // Smooth scroll to reviews section
-        const revSec = document.getElementById('reviews');
-        if (revSec) {
-          revSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
     }
 
     // Initial render

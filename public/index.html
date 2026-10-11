@@ -543,9 +543,9 @@
                         <button class="btn-review-action btn-interchange" id="btnInterchangeReviews" title="Interchange and rotate reviews">
                             <i class="fas fa-random" aria-hidden="true"></i> <span>Interchange</span>
                         </button>
-                        <button class="btn-review-action btn-write" id="btnOpenWriteReview">
+                        <a class="btn-review-action btn-write" href="https://g.page/r/CVB3JnGIzXpgEBM/review" target="_blank" rel="noopener noreferrer">
                             <i class="fas fa-pen" aria-hidden="true"></i> <span>Write Review</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
 
@@ -727,67 +727,6 @@
         <i class="fab fa-whatsapp" aria-hidden="true"></i>
         <span class="floating-btn-text">Order on WhatsApp</span>
     </a>
-
-    <!-- Write a Review Modal -->
-    <div class="review-modal-backdrop" id="reviewModal" role="dialog" aria-modal="true" aria-labelledby="modalReviewTitle" aria-hidden="true">
-        <div class="review-modal-card">
-            <div class="modal-header-row">
-                <h3 id="modalReviewTitle">Share Your Baidya Crab House Experience</h3>
-                <button type="button" class="modal-close-btn" id="btnCloseReviewModal" aria-label="Close dialog">&times;</button>
-            </div>
-            <form id="writeReviewForm">
-                <div class="form-group-review">
-                    <label>Your Rating *</label>
-                    <div class="star-rating-select" id="starRatingSelector" role="radiogroup" aria-label="Select star rating">
-                        <button type="button" class="star-rating-btn active" data-rating="1" aria-label="1 star">★</button>
-                        <button type="button" class="star-rating-btn active" data-rating="2" aria-label="2 stars">★</button>
-                        <button type="button" class="star-rating-btn active" data-rating="3" aria-label="3 stars">★</button>
-                        <button type="button" class="star-rating-btn active" data-rating="4" aria-label="4 stars">★</button>
-                        <button type="button" class="star-rating-btn active" data-rating="5" aria-label="5 stars">★</button>
-                    </div>
-                    <input type="hidden" id="reviewRatingInput" value="5">
-                </div>
-
-                <div class="form-group-review">
-                    <label for="reviewAuthorInput">Your Full Name *</label>
-                    <input type="text" id="reviewAuthorInput" required placeholder="e.g. Rahul Sen">
-                </div>
-
-                <div class="form-group-review">
-                    <label for="reviewLocationInput">Location in Greater Kolkata</label>
-                    <input type="text" id="reviewLocationInput" placeholder="e.g. Salt Lake, Sector 2 · Kolkata">
-                </div>
-
-                <div class="form-group-review">
-                    <label for="reviewVarietyInput">Crab Variety Ordered</label>
-                    <select id="reviewVarietyInput">
-                        <option value="Live Female Mud Crabs (Ghilu Special)">Live Female Mud Crabs (Ghilu Special)</option>
-                        <option value="Jumbo Male Mud Crabs">Jumbo Male Mud Crabs</option>
-                        <option value="Cleaned &amp; Cut Crabs (Ready-to-Cook)">Cleaned &amp; Cut Crabs (Ready-to-Cook)</option>
-                        <option value="Green River Crabs">Green River Crabs</option>
-                        <option value="Blue Swimming Crabs">Blue Swimming Crabs</option>
-                    </select>
-                </div>
-
-                <div class="form-group-review">
-                    <label for="reviewQuoteInput">Your Review / Experience *</label>
-                    <textarea id="reviewQuoteInput" rows="4" required placeholder="Tell us about the freshness, ghilu quality, and delivery experience..."></textarea>
-                </div>
-
-                <div style="background: #f8fafc; border-radius: var(--radius-md); padding: 0.85rem; margin-bottom: 1rem; font-size: 0.8rem; color: var(--text-muted); border: 1px solid var(--border-light);">
-                    <i class="fab fa-google" style="color: #4285f4; margin-right: 0.35rem;"></i>
-                    Your review will show on the site immediately and can also be submitted to our <a href="https://g.page/r/CVB3JnGIzXpgEBM/review" target="_blank" rel="noopener noreferrer" style="color: #1a73e8; text-decoration: underline;">Google Business profile</a>.
-                </div>
-
-                <div class="modal-footer-row">
-                    <button type="button" class="btn secondary" id="btnCancelReview">Cancel</button>
-                    <button type="submit" class="btn primary" id="btnSubmitReview">
-                        <i class="fas fa-paper-plane" aria-hidden="true"></i> Submit Review
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <!-- Toast Notification Element -->
     <div class="review-toast" id="reviewToast" role="status" aria-live="polite">

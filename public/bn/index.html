@@ -544,9 +544,9 @@
                         <button class="btn-review-action btn-interchange" id="btnInterchangeReviews" title="রিভিউ পরিবর্তন ও অদলবদল করুন">
                             <i class="fas fa-random" aria-hidden="true"></i> <span>রিভিউ অদলবদল</span>
                         </button>
-                        <button class="btn-review-action btn-write" id="btnOpenWriteReview">
+                        <a class="btn-review-action btn-write" href="https://g.page/r/CVB3JnGIzXpgEBM/review" target="_blank" rel="noopener noreferrer">
                             <i class="fas fa-pen" aria-hidden="true"></i> <span>রিভিউ লিখুন</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
 
@@ -728,67 +728,6 @@
         <i class="fab fa-whatsapp" aria-hidden="true"></i>
         <span class="floating-btn-text">WhatsApp-এ অর্ডার</span>
     </a>
-
-    <!-- Write a Review Modal (Bengali) -->
-    <div class="review-modal-backdrop" id="reviewModal" role="dialog" aria-modal="true" aria-labelledby="modalReviewTitle" aria-hidden="true">
-        <div class="review-modal-card">
-            <div class="modal-header-row">
-                <h3 id="modalReviewTitle">আপনার অভিজ্ঞতা শেয়ার করুন</h3>
-                <button type="button" class="modal-close-btn" id="btnCloseReviewModal" aria-label="Close dialog">&times;</button>
-            </div>
-            <form id="writeReviewForm">
-                <div class="form-group-review">
-                    <label>আপনার রেটিং *</label>
-                    <div class="star-rating-select" id="starRatingSelector" role="radiogroup" aria-label="স্টার রেটিং নির্বাচন করুন">
-                        <button type="button" class="star-rating-btn active" data-rating="1" aria-label="১ স্টার">★</button>
-                        <button type="button" class="star-rating-btn active" data-rating="2" aria-label="২ স্টার">★</button>
-                        <button type="button" class="star-rating-btn active" data-rating="3" aria-label="৩ স্টার">★</button>
-                        <button type="button" class="star-rating-btn active" data-rating="4" aria-label="৪ স্টার">★</button>
-                        <button type="button" class="star-rating-btn active" data-rating="5" aria-label="৫ স্টার">★</button>
-                    </div>
-                    <input type="hidden" id="reviewRatingInput" value="5">
-                </div>
-
-                <div class="form-group-review">
-                    <label for="reviewAuthorInput">আপনার নাম *</label>
-                    <input type="text" id="reviewAuthorInput" required placeholder="যেমন: রাহুল সেন">
-                </div>
-
-                <div class="form-group-review">
-                    <label for="reviewLocationInput">আপনার এলাকা / শহর</label>
-                    <input type="text" id="reviewLocationInput" placeholder="যেমন: সল্টলেক, সেক্টর ২ · কলকাতা">
-                </div>
-
-                <div class="form-group-review">
-                    <label for="reviewVarietyInput">অর্ডার করা কাঁকড়ার প্রকার</label>
-                    <select id="reviewVarietyInput">
-                        <option value="জ্যান্ত ফিমেল কাঁকড়া (ঘিলু স্পেশাল)">জ্যান্ত ফিমেল কাঁকড়া (ঘিলু স্পেশাল)</option>
-                        <option value="জাম্বো মেল মাড ক্র্যাব">জাম্বো মেল মাড ক্র্যাব</option>
-                        <option value="কাটা ও পরিষ্কার করা কাঁকড়া">কাটা ও পরিষ্কার করা কাঁকড়া</option>
-                        <option value="সবুজ নদীর কাঁকড়া">সবুজ নদীর কাঁকড়া</option>
-                        <option value="ব্লু সুইমিং ক্র্যাব">ব্লু সুইমিং ক্র্যাব</option>
-                    </select>
-                </div>
-
-                <div class="form-group-review">
-                    <label for="reviewQuoteInput">আপনার মতামত ও অভিজ্ঞতা *</label>
-                    <textarea id="reviewQuoteInput" rows="4" required placeholder="কাঁকড়ার তাজা ভাব, ঘিলুর মান এবং হোম ডেলিভারি কেমন ছিল লিখুন..."></textarea>
-                </div>
-
-                <div style="background: #f8fafc; border-radius: var(--radius-md); padding: 0.85rem; margin-bottom: 1rem; font-size: 0.8rem; color: var(--text-muted); border: 1px solid var(--border-light);">
-                    <i class="fab fa-google" style="color: #4285f4; margin-right: 0.35rem;"></i>
-                    আপনার রিভিউ ওয়েবসাইটে তৎক্ষণাৎ যুক্ত হবে এবং আমাদের <a href="https://g.page/r/CVB3JnGIzXpgEBM/review" target="_blank" rel="noopener noreferrer" style="color: #1a73e8; text-decoration: underline;">Google বিজনেস পেজেও</a> জমা দিতে পারেন।
-                </div>
-
-                <div class="modal-footer-row">
-                    <button type="button" class="btn secondary" id="btnCancelReview">বাতিল</button>
-                    <button type="submit" class="btn primary" id="btnSubmitReview">
-                        <i class="fas fa-paper-plane" aria-hidden="true"></i> রিভিউ জমা দিন
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <!-- Toast Notification Element -->
     <div class="review-toast" id="reviewToast" role="status" aria-live="polite">
