@@ -1,180 +1,145 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
+const GOOGLE_REVIEWS_URL = 'https://mybusiness.googleapis.com/v4';
+const CACHE_TTL_MS = 5 * 60 * 1000;
 
-let reviewsData = null;
+let cachedResponse;
+let cacheExpiresAt = 0;
 
-// Determine candidate file paths for reviews.json
-function getCandidatePaths() {
-  const candidates = [];
-  // 1. /tmp/reviews.json (persistent across warm lambda invocations in serverless)
-  candidates.push(path.join('/tmp', 'reviews.json'));
-  // 2. process.cwd() / reviews.json & process.cwd() / public / reviews.json
-  candidates.push(path.join(process.cwd(), 'public', 'reviews.json'));
-  candidates.push(path.join(process.cwd(), 'reviews.json'));
-  // 3. Relative to this file
-  try {
-    const currentDir = path.dirname(fileURLToPath(import.meta.url));
-    candidates.push(path.join(currentDir, '..', 'public', 'reviews.json'));
-    candidates.push(path.join(currentDir, '..', 'reviews.json'));
-    candidates.push(path.join(currentDir, 'reviews.json'));
-  } catch (e) {}
-  return candidates;
+function getConfiguration() {
+  const config = {
+    clientId: process.env.GOOGLE_OAUTH_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+    refreshToken: process.env.GOOGLE_OAUTH_REFRESH_TOKEN,
+    accountId: process.env.GOOGLE_BUSINESS_ACCOUNT_ID,
+    locationId: process.env.GOOGLE_BUSINESS_LOCATION_ID
+  };
+
+  if (Object.values(config).some(value => !value)) {
+    const error = new Error('Google Business Profile reviews are not configured.');
+    error.statusCode = 503;
+    throw error;
+  }
+
+  return config;
 }
 
-function loadReviews() {
-  const candidates = getCandidatePaths();
-  for (const candidate of candidates) {
-    try {
-      if (fs.existsSync(candidate)) {
-        const raw = fs.readFileSync(candidate, 'utf8');
-        const parsed = JSON.parse(raw);
-        if (parsed && Array.isArray(parsed.reviews)) {
-          reviewsData = parsed;
-          return;
-        }
-      }
-    } catch (err) {
-      // Continue to next candidate path
-    }
+async function readJsonResponse(response, serviceName) {
+  if (!response.ok) {
+    const error = new Error(`${serviceName} returned HTTP ${response.status}.`);
+    error.statusCode = 502;
+    throw error;
+  }
+  return response.json();
+}
+
+async function getAccessToken(config, fetchImpl) {
+  const response = await fetchImpl(GOOGLE_TOKEN_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      client_id: config.clientId,
+      client_secret: config.clientSecret,
+      refresh_token: config.refreshToken,
+      grant_type: 'refresh_token'
+    }),
+    signal: AbortSignal.timeout(8000)
+  });
+  const tokenData = await readJsonResponse(response, 'Google OAuth');
+
+  if (typeof tokenData.access_token !== 'string' || !tokenData.access_token) {
+    const error = new Error('Google OAuth did not return an access token.');
+    error.statusCode = 502;
+    throw error;
   }
 
-  if (!reviewsData || !Array.isArray(reviewsData.reviews)) {
-    reviewsData = { average_rating: 4.9, total_reviews: 48, reviews: [] };
-  }
+  return tokenData.access_token;
+}
+
+function getResourceId(value, prefix) {
+  const id = value.startsWith(`${prefix}/`) ? value.slice(prefix.length + 1) : value;
+  return `${prefix}/${encodeURIComponent(id)}`;
+}
+
+async function fetchAllReviews(config, fetchImpl) {
+  const accessToken = await getAccessToken(config, fetchImpl);
+  const accountPath = getResourceId(config.accountId, 'accounts');
+  const locationPath = getResourceId(config.locationId, 'locations');
+  const reviews = [];
+  const seenPageTokens = new Set();
+  let nextPageToken;
+  let responseData;
+  let summaryData;
+
+  do {
+    const url = new URL(
+      `${GOOGLE_REVIEWS_URL}/${accountPath}/${locationPath}/reviews`
+    );
+    url.searchParams.set('pageSize', '50');
+    url.searchParams.set('orderBy', 'updateTime desc');
+    if (nextPageToken) url.searchParams.set('pageToken', nextPageToken);
+
+    const response = await fetchImpl(url, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      signal: AbortSignal.timeout(8000)
+    });
+    responseData = await readJsonResponse(response, 'Google Business Profile');
+    summaryData ??= responseData;
+
+    if (Array.isArray(responseData.reviews)) {
+      reviews.push(...responseData.reviews);
+    }
+
+    nextPageToken = responseData.nextPageToken;
+    if (nextPageToken && seenPageTokens.has(nextPageToken)) {
+      throw new Error('Google Business Profile returned a repeated page token.');
+    }
+    if (nextPageToken) seenPageTokens.add(nextPageToken);
+  } while (nextPageToken);
+
+  return {
+    averageRating: summaryData.averageRating ?? null,
+    totalReviewCount: summaryData.totalReviewCount ?? reviews.length,
+    reviews: reviews.map(review => {
+      const createTime = typeof review.createTime === 'string' ? review.createTime : '';
+      return {
+        reviewId: typeof review.reviewId === 'string' ? review.reviewId : '',
+        reviewerName: typeof review.reviewer?.displayName === 'string' ? review.reviewer.displayName : '',
+        comment: typeof review.comment === 'string' ? review.comment : '',
+        starRating: typeof review.starRating === 'string' ? review.starRating : '',
+        createTime,
+        updateTime: typeof review.updateTime === 'string' ? review.updateTime : createTime
+      };
+    })
+  };
 }
 
 export default async function handler(req, res) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, HEAD, OPTIONS');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  );
+  res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    res.setHeader('Allow', 'GET, HEAD');
+    return res.status(405).json({ success: false, error: 'Method not allowed.' });
   }
 
-  if (!reviewsData) {
-    loadReviews();
+  if (req.method === 'HEAD') return res.status(200).end();
+
+  try {
+    if (cachedResponse && Date.now() < cacheExpiresAt) {
+      return res.status(200).json(cachedResponse);
+    }
+
+    const data = await fetchAllReviews(getConfiguration(), globalThis.fetch);
+    cachedResponse = data;
+    cacheExpiresAt = Date.now() + CACHE_TTL_MS;
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error('Failed to load Google Business Profile reviews:', error);
+    res.setHeader('Cache-Control', 'no-store');
+    const statusCode = error.statusCode || 502;
+    const message = statusCode === 503
+      ? 'Google reviews are not configured yet.'
+      : 'Unable to load Google reviews right now.';
+    return res.status(statusCode).json({ success: false, error: message });
   }
-
-  // GET / HEAD: Fetch reviews
-  if (req.method === 'GET' || req.method === 'HEAD') {
-    if (req.method === 'HEAD') {
-      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-      return res.status(200).end();
-    }
-    const query = req.query || {};
-    const sort = query.sort;
-    const category = query.category;
-    const limit = query.limit;
-
-    let list = [...(reviewsData.reviews || [])];
-
-    // Filter by category if requested
-    if (category && category !== 'all') {
-      list = list.filter(r => r.category === category);
-    }
-
-    // Sorting
-    if (sort === 'newest') {
-      list.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-    } else if (sort === 'highest') {
-      list.sort((a, b) => (b.rating || 5) - (a.rating || 5));
-    } else if (sort === 'interchange' || sort === 'shuffle') {
-      // Fisher-Yates shuffle to interchange review order
-      for (let i = list.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [list[i], list[j]] = [list[j], list[i]];
-      }
-    }
-
-    const max = limit ? parseInt(limit, 10) : list.length;
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-
-    return res.status(200).json({
-      success: true,
-      average_rating: reviewsData.average_rating || 4.9,
-      total_reviews: reviewsData.total_reviews || list.length,
-      last_synced: new Date().toISOString(),
-      count: list.length,
-      reviews: list.slice(0, max)
-    });
-  }
-
-  // POST: Submit a new review
-  if (req.method === 'POST') {
-    let body = req.body;
-    if (typeof body === 'string') {
-      try {
-        body = JSON.parse(body);
-      } catch (e) {
-        body = {};
-      }
-    }
-    const { author, location, rating, quote, order_tag, category } = body || {};
-
-    if (!author || !quote) {
-      return res.status(400).json({
-        success: false,
-        error: 'Author name and review text are required.'
-      });
-    }
-
-    const initials =
-      author.trim().split(' ').map(s => s[0]).join('').slice(0, 2).toUpperCase() || 'KH';
-
-    const newReview = {
-      id: 'rev-' + Date.now(),
-      author: author.trim(),
-      author_bn: author.trim(),
-      initials,
-      location: location ? location.trim() : 'Kolkata Customer',
-      location_bn: location ? location.trim() : 'কলকাতা ক্রেতা',
-      rating: Number(rating) || 5,
-      date: new Date().toISOString(),
-      date_display: 'Just now',
-      date_display_bn: 'এইমাত্র',
-      order_tag: order_tag || 'Fresh Sundarban Crabs',
-      order_tag_bn: order_tag || 'তাজা সুন্দরবনের কাঁকড়া',
-      category: category || 'general',
-      quote: quote.trim(),
-      quote_bn: quote.trim(),
-      verified: true,
-      color: 'teal',
-      is_new: true
-    };
-
-    reviewsData.reviews.unshift(newReview);
-    reviewsData.total_reviews = (reviewsData.total_reviews || 48) + 1;
-
-    // Persist to /tmp (serverless) and process.cwd() (local disk) if writable
-    try {
-      const serialized = JSON.stringify(reviewsData, null, 2);
-      try {
-        fs.writeFileSync(path.join('/tmp', 'reviews.json'), serialized);
-      } catch (err) {}
-      try {
-        fs.writeFileSync(path.join(process.cwd(), 'public', 'reviews.json'), serialized);
-      } catch (err) {}
-      try {
-        fs.writeFileSync(path.join(process.cwd(), 'reviews.json'), serialized);
-      } catch (err) {}
-    } catch (e) {
-      console.error('Failed to persist review:', e);
-    }
-
-    return res.status(201).json({
-      success: true,
-      message: 'Review added successfully',
-      review: newReview,
-      total_reviews: reviewsData.total_reviews
-    });
-  }
-
-  return res.status(405).json({ success: false, error: 'Method not allowed' });
 }

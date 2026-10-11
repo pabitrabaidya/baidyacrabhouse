@@ -513,12 +513,12 @@
                 <!-- Google Rating Summary Header -->
                 <div class="reviews-summary-card">
                     <div class="reviews-rating-overall">
-                        <div class="overall-score-badge">4.9</div>
+                        <div class="overall-score-badge" id="googleReviewAverage">—</div>
                         <div>
-                            <div class="overall-stars">★★★★★</div>
+                            <div class="overall-stars" id="googleReviewStars" aria-label="Google rating"></div>
                             <div class="overall-meta">
-                                4.9 out of 5 · <strong>Google Business Rating</strong>
-                                <span>(Verified local buyers)</span>
+                                <span id="googleReviewRatingText">Google Business rating</span>
+                                <span id="googleReviewCount">Loading Google reviews…</span>
                             </div>
                         </div>
                     </div>
@@ -537,17 +537,14 @@
 
                 <!-- Streamlined Reviews Controls -->
                 <div class="reviews-controls-bar">
-                    <div class="reviews-filter-pills" role="tablist" aria-label="Review display options">
-                        <button class="review-pill active" id="btnViewAll" data-filter="all">All Reviews (<span id="reviewsCountBadge">8</span>)</button>
-                        <button class="review-pill" id="btnFetchNewest" data-sort="newest" title="Fetch newest verified reviews from server">
-                            <i class="fas fa-sync-alt" aria-hidden="true"></i> <span>Fetch Newest</span>
-                        </button>
+                    <div class="reviews-filter-pills">
+                        <span class="review-pill active" id="reviewsCountBadge">Google Reviews</span>
                     </div>
 
                     <div class="reviews-actions-group">
-                        <button class="btn-review-action btn-interchange" id="btnInterchangeReviews" title="Interchange and rotate reviews">
-                            <i class="fas fa-random" aria-hidden="true"></i> <span>Interchange</span>
-                        </button>
+                        <a class="btn-review-action" href="https://www.google.com/search?kgmid=%2Fg%2F11zxnvxl2q&amp;hl=en-IN&amp;q=Baidya+crab+house#lrd=0x3a02717e220b0e7b:0x607acd8871267750,1,,,," target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-google" aria-hidden="true"></i> <span>View on Google</span>
+                        </a>
                         <a class="btn-review-action btn-write" href="https://g.page/r/CVB3JnGIzXpgEBM/review" target="_blank" rel="noopener noreferrer">
                             <i class="fas fa-pen" aria-hidden="true"></i> <span>Write Review</span>
                         </a>
@@ -555,138 +552,8 @@
                 </div>
 
                 <!-- Reviews Grid -->
-                <div class="reviews-grid" id="reviewsGridContainer">
-                    <!-- Review 1 -->
-                    <article class="review-card">
-                        <div>
-                            <div class="review-top">
-                                <div class="review-author">
-                                    <div class="review-avatar avatar-navy">SR</div>
-                                    <div>
-                                        <div class="review-name">Subhashish Roy</div>
-                                        <div class="review-location">Salt Lake, Sector 3 · Kolkata</div>
-                                    </div>
-                                </div>
-                                <i class="fab fa-google review-google-icon" title="Google Review" aria-hidden="true"></i>
-                            </div>
-                            <div class="review-rating-row">
-                                <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
-                                <span class="review-badge"><i class="fas fa-shield-alt"></i> Verified Buyer</span>
-                            </div>
-                            <p class="review-quote">
-                                “Ordered 2 kg female mud crabs for our Sunday family lunch. Every single crab was actively moving and 100% full of rich orange ghilu as promised! Delivered in 2.5 hours packed with ice. The freshest crabs you can get in Kolkata.”
-                            </p>
-                        </div>
-                        <div class="review-footer">
-                            <span class="review-order-tag">🦀 Live Female Mud Crabs</span>
-                            <span class="review-date">2 weeks ago</span>
-                        </div>
-                    </article>
-
-                    <!-- Review 2 -->
-                    <article class="review-card">
-                        <div>
-                            <div class="review-top">
-                                <div class="review-author">
-                                    <div class="review-avatar avatar-teal">PM</div>
-                                    <div>
-                                        <div class="review-name">Priya Mukherjee</div>
-                                        <div class="review-location">Jadavpur · South Kolkata</div>
-                                    </div>
-                                </div>
-                                <i class="fab fa-google review-google-icon" title="Google Review" aria-hidden="true"></i>
-                            </div>
-                            <div class="review-rating-row">
-                                <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
-                                <span class="review-badge"><i class="fas fa-shield-alt"></i> Verified Buyer</span>
-                            </div>
-                            <p class="review-quote">
-                                “Outstanding quality! Getting 3 kg crabs cleaned and expertly cut with zero extra charge made cooking Kankra Jhal so effortless. Meat was sweet and firm, totally fresh from Sundarban rivers. Cash on delivery was seamless.”
-                            </p>
-                        </div>
-                        <div class="review-footer">
-                            <span class="review-order-tag">🔪 Cleaned &amp; Cut Crabs</span>
-                            <span class="review-date">3 weeks ago</span>
-                        </div>
-                    </article>
-
-                    <!-- Review 3 -->
-                    <article class="review-card">
-                        <div>
-                            <div class="review-top">
-                                <div class="review-author">
-                                    <div class="review-avatar avatar-coral">AB</div>
-                                    <div>
-                                        <div class="review-name">Anirban Bhattacharya</div>
-                                        <div class="review-location">New Town, Action Area 1 · Kolkata</div>
-                                    </div>
-                                </div>
-                                <i class="fab fa-google review-google-icon" title="Google Review" aria-hidden="true"></i>
-                            </div>
-                            <div class="review-rating-row">
-                                <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
-                                <span class="review-badge"><i class="fas fa-shield-alt"></i> Verified Buyer</span>
-                            </div>
-                            <p class="review-quote">
-                                “First time ordering fresh river crabs online and Baidya Crab House blew us away. Huge claws, heavy crabs packed with succulent sweet meat. Arrived alive at my doorstep within 2 hours. Will be ordering regularly!”
-                            </p>
-                        </div>
-                        <div class="review-footer">
-                            <span class="review-order-tag">🦀 Jumbo Male Mud Crabs</span>
-                            <span class="review-date">1 month ago</span>
-                        </div>
-                    </article>
-
-                    <!-- Review 4 -->
-                    <article class="review-card">
-                        <div>
-                            <div class="review-top">
-                                <div class="review-author">
-                                    <div class="review-avatar avatar-green">DS</div>
-                                    <div>
-                                        <div class="review-name">Debolina Sen</div>
-                                        <div class="review-location">Ballygunge &amp; Dhakuria · Kolkata</div>
-                                    </div>
-                                </div>
-                                <i class="fab fa-google review-google-icon" title="Google Review" aria-hidden="true"></i>
-                            </div>
-                            <div class="review-rating-row">
-                                <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
-                                <span class="review-badge"><i class="fas fa-shield-alt"></i> Verified Buyer</span>
-                            </div>
-                            <p class="review-quote">
-                                “Best crab supplier in Kolkata! We tested the 100% ghilu guarantee — 10 out of 10 crabs were packed with thick coral. The WhatsApp ordering was courteous and transparent with daily catch rates. Highly recommended!”
-                            </p>
-                        </div>
-                        <div class="review-footer">
-                            <span class="review-order-tag">🦀 10/10 Ghilu Guarantee</span>
-                            <span class="review-date">1 month ago</span>
-                        </div>
-                    </article>
-                </div>
-
-                <!-- Google Business & Maps Trust Callout -->
-                <div class="google-review-box">
-                    <div style="display: inline-flex; align-items: center; gap: 0.5rem; color: #4285f4; font-size: 1.25rem; margin-bottom: 0.5rem;">
-                        <i class="fab fa-google"></i>
-                        <span style="color: #fbbc04; font-size: 1.1rem; letter-spacing: 2px;">★★★★★</span>
-                    </div>
-                    <h3>Share Your Experience or Find Us on Google</h3>
-                    <p>
-                        Satisfied with your fresh Sundarban catch and doorstep delivery? Help our local business grow by leaving a review, or view our location and business details on Google Maps.
-                    </p>
-                    <div class="google-actions">
-                        <a href="https://g.page/r/CVB3JnGIzXpgEBM/review" class="btn btn-google" target="_blank" rel="noopener noreferrer">
-                            <i class="fab fa-google" style="color: #4285f4;"></i> Write a Google Review
-                        </a>
-                        <a href="https://maps.app.goo.gl/DGp7nQFihYrxrQiw7" class="btn btn-maps" target="_blank" rel="noopener noreferrer">
-                            <i class="fas fa-map-marker-alt"></i> View on Google Maps
-                        </a>
-                        <a href="https://share.google/c3LOzEFQreLSIWzhn" class="btn secondary" target="_blank" rel="noopener noreferrer">
-                            <i class="fas fa-store"></i> Google Business Profile
-                        </a>
-                    </div>
-                </div>
+                <div class="reviews-grid" id="reviewsGridContainer" aria-live="polite" aria-busy="true">Loading reviews from Google…</div>
+                <p id="reviewsStatusText" class="review-status" role="status" aria-live="polite"></p>
             </div>
         </section>
 
@@ -732,12 +599,6 @@
         <i class="fab fa-whatsapp" aria-hidden="true"></i>
         <span class="floating-btn-text">Order on WhatsApp</span>
     </a>
-
-    <!-- Toast Notification Element -->
-    <div class="review-toast" id="reviewToast" role="status" aria-live="polite">
-        <i class="fas fa-check-circle" aria-hidden="true"></i>
-        <span id="reviewToastMessage">Newest reviews fetched!</span>
-    </div>
 
     <script src="scripts.js" defer></script>
 

@@ -662,376 +662,133 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // --- 7. Dynamic Reviews Fetching, Sorting & Interchanging ---
-  function initReviewsInterchange() {
+  // --- 7. Google Business Profile Reviews ---
+  function initGoogleReviews() {
     const reviewsGrid = document.getElementById('reviewsGridContainer');
     if (!reviewsGrid) return;
 
     const isBn = document.documentElement.lang === 'bn' || window.location.pathname.includes('/bn/');
     const countBadge = document.getElementById('reviewsCountBadge');
     const statusText = document.getElementById('reviewsStatusText');
-    const btnFetch = document.getElementById('btnFetchNewest');
-    const btnInterchange = document.getElementById('btnInterchangeReviews');
-    const btnAutoRotate = document.getElementById('btnToggleAutoRotate');
-    const toast = document.getElementById('reviewToast');
-    const toastMsg = document.getElementById('reviewToastMessage');
-    const filterPills = document.querySelectorAll('.reviews-filter-pills .review-pill');
-
-    let allReviews = [];
-    let currentFilter = 'all';
-    let autoRotateTimer = null;
-    let isAutoRotating = false;
-
-    // Default verified reviews dataset
-    const DEFAULT_REVIEWS = [
-      {
-        id: "rev-new-1",
-        author: "Sneha Pal",
-        author_bn: "স্নেহা পাল",
-        initials: "SP",
-        location: "Rajarhat, Chinar Park · Kolkata",
-        location_bn: "রাজারহাট, চিনার পার্ক · কলকাতা",
-        rating: 5,
-        date: "2026-10-09T18:15:00Z",
-        date_display: "Yesterday",
-        date_display_bn: "গতকাল",
-        order_tag: "Fresh Mud Crabs",
-        order_tag_bn: "টাটকা মাড কাঁকড়া",
-        category: "delivery",
-        quote: "I was skeptical about ordering live crabs on WhatsApp, but Baidya Crab House shared photos of morning river catch and weighed accurately. Delivery arrived under 2 hours in ice packaging. Truly delicious sweet crab meat!",
-        quote_bn: "হোয়াটসঅ্যাপে জ্যান্ত কাঁকড়া অর্ডার নিয়ে একটু সংশয় ছিল, কিন্তু Baidya Crab House সকালের তাজা নদী থেকে ধরা কাঁকড়ার ছবি পাঠিয়ে ওজন দেখিয়ে দেয়। বরফের প্যাকেটে ২ ঘণ্টার কম সময়ে চলে এসেছে। অসম্ভব মিষ্টি মাংস!",
-        verified: true,
-        color: "teal"
-      },
-      {
-        id: "rev-1",
-        author: "Subhashish Roy",
-        author_bn: "শুভাশীষ রায়",
-        initials: "SR",
-        location: "Salt Lake, Sector 3 · Kolkata",
-        location_bn: "সল্টলেক, সেক্টর ৩ · কলকাতা",
-        rating: 5,
-        date: "2026-10-06T10:30:00Z",
-        date_display: "4 days ago",
-        date_display_bn: "৪ দিন আগে",
-        order_tag: "Live Female Mud Crabs",
-        order_tag_bn: "জ্যান্ত ফিমেল কাঁকড়া",
-        category: "ghilu",
-        quote: "Ordered 2 kg female mud crabs for our Sunday family lunch. Every single crab was actively moving and 100% full of rich orange ghilu as promised! Delivered in 2.5 hours packed with ice. The freshest crabs you can get in Kolkata.",
-        quote_bn: "রবিবারের পারিবারিক লাঞ্চের জন্য ২ কেজি ফিমেল মাড ক্র্যাব অর্ডার করেছিলাম। প্রতিটি কাঁকড়াই জ্যান্ত নড়াচড়া করছিল এবং প্রতিশ্রুতি মতো ১০০% লালচে ঘিলুতে ভরা ছিল! বরফের প্যাকেটে ২.৫ ঘণ্টায় পৌঁছে গেছে।",
-        verified: true,
-        color: "navy"
-      },
-      {
-        id: "rev-2",
-        author: "Priya Mukherjee",
-        author_bn: "প্রিয়া মুখোপাধ্যায়",
-        initials: "PM",
-        location: "Jadavpur · South Kolkata",
-        location_bn: "যাদবপুর · দক্ষিণ কলকাতা",
-        rating: 5,
-        date: "2026-10-02T14:20:00Z",
-        date_display: "1 week ago",
-        date_display_bn: "১ সপ্তাহ আগে",
-        order_tag: "Free Cleaning & Cutting",
-        order_tag_bn: "রেডি-টু-কুক কাটিং",
-        category: "cleaning",
-        quote: "Outstanding quality! Getting 3 kg crabs cleaned and expertly cut with zero extra charge made cooking Kankra Jhal so effortless. Meat was sweet and firm, totally fresh from Sundarban rivers. Cash on delivery was seamless.",
-        quote_bn: "অসাধারণ কোয়ালিটি! ৩ কেজির অর্ডারে একদম বিনামূল্যে ফ্রেশ কাটিং আর ক্লিনিং করে দেওয়ায় আমাদের কাঁকড়ার ঝাল বানানোর সময় অনেক বাঁচল। মাংস ভীষণ মিষ্টি ও সুস্বাদু। ক্যাশ অন ডেলিভারি একদম নির্বিঘ্ন।",
-        verified: true,
-        color: "teal"
-      },
-      {
-        id: "rev-3",
-        author: "Anirban Bhattacharya",
-        author_bn: "অনির্বাণ ভট্টাচার্য",
-        initials: "AB",
-        location: "New Town, Action Area 1 · Kolkata",
-        location_bn: "নিউটাউন, অ্যাকশন এরিয়া ১ · কলকাতা",
-        rating: 5,
-        date: "2026-09-28T16:45:00Z",
-        date_display: "2 weeks ago",
-        date_display_bn: "২ সপ্তাহ আগে",
-        order_tag: "Jumbo Male Mud Crabs",
-        order_tag_bn: "জাম্বো মেল মাড ক্র্যাব",
-        category: "general",
-        quote: "First time ordering fresh river crabs online and Baidya Crab House blew us away. Huge claws, heavy crabs packed with succulent sweet meat. Arrived alive at my doorstep within 2 hours. Will be ordering regularly!",
-        quote_bn: "অনলাইনে সুন্দরবনের নদীর কাঁকড়া প্রথমবার নেওয়া। বিশাল দাঁড়াযুক্ত জ্যান্ত মেল কাঁকড়া, রসালো মিষ্টি মাংস। মাত্র ২ ঘণ্টায় দরজায় জ্যান্ত অবস্থায় ডেলিভারি পেয়েছি। নিয়মিত নেব।",
-        verified: true,
-        color: "coral"
-      },
-      {
-        id: "rev-4",
-        author: "Debolina Sen",
-        author_bn: "দেবলীনা সেন",
-        initials: "DS",
-        location: "Ballygunge & Dhakuria · Kolkata",
-        location_bn: "বালিগঞ্জ ও ঢাকুরিয়া · কলকাতা",
-        rating: 5,
-        date: "2026-09-22T11:10:00Z",
-        date_display: "3 weeks ago",
-        date_display_bn: "৩ সপ্তাহ আগে",
-        order_tag: "10/10 Ghilu Guarantee",
-        order_tag_bn: "১০/১০ ঘিলুর গ্যারান্টি",
-        category: "ghilu",
-        quote: "Best crab supplier in Kolkata! We tested the 100% ghilu guarantee — 10 out of 10 crabs were packed with thick coral. The WhatsApp ordering was courteous and transparent with daily catch rates. Highly recommended!",
-        quote_bn: "কলকাতায় সেরা কাঁকড়ার নির্ভরযোগ্য বিক্রেতা! ১০টির মধ্যে ১০টিতেই ঘিলু থাকার গ্যারান্টি নিখুঁতভাবে পেয়েছি। হোয়াটসঅ্যাপে অর্ডার নেওয়ার ব্যবহার খুবই ভদ্র ও আন্তরিক। সবাইকে নেওয়ার পরামর্শ দেব।",
-        verified: true,
-        color: "green"
-      },
-      {
-        id: "rev-5",
-        author: "Sourav Ganguly",
-        author_bn: "সৌরভ গাঙ্গুলী",
-        initials: "SG",
-        location: "Dum Dum · North Kolkata",
-        location_bn: "দমদম · উত্তর কলকাতা",
-        rating: 5,
-        date: "2026-09-18T09:40:00Z",
-        date_display: "3 weeks ago",
-        date_display_bn: "৩ সপ্তাহ আগে",
-        order_tag: "Express 90-Min Delivery",
-        order_tag_bn: "দ্রুত ডেলিভারি",
-        category: "delivery",
-        quote: "Received 1.5 kg large male crabs within 90 minutes. Still snapping live claws in the delivery box! River mud crab taste is so much sweeter than regular sea varieties. Very satisfied customer.",
-        quote_bn: "অর্ডার করার ৯০ মিনিটের মধ্যে ১.৫ কেজি বড় সাইজের পুরুষ কাঁকড়া হাতে পেয়েছি। ডেলিভারি বক্সের মধ্যেও জীবন্ত নড়াচড়া করছিল! সুন্দরবনের নদীর কাঁকড়ার স্বাদ সমুদ্রের কাঁকড়ার চেয়ে অনেক বেশি মিষ্টি।",
-        verified: true,
-        color: "navy"
-      },
-      {
-        id: "rev-6",
-        author: "Rima Dasgupta",
-        author_bn: "রিমা দাশগুপ্ত",
-        initials: "RD",
-        location: "Garia & Sonarpur · South Kolkata",
-        location_bn: "গড়িয়া ও সোনারপুর · দক্ষিণ কলকাতা",
-        rating: 5,
-        date: "2026-09-12T13:20:00Z",
-        date_display: "1 month ago",
-        date_display_bn: "১ মাস আগে",
-        order_tag: "Full Ghilu Female Crab",
-        order_tag_bn: "ঘিলু ভরা ফিমেল কাঁকড়া",
-        category: "ghilu",
-        quote: "The coral in the female crabs was so rich and flavorful, made heavenly crab curry for our guests. Courteous delivery person with thermal insulation box. Will order again next weekend.",
-        quote_bn: "ফিমেল কাঁকড়ায় ঘিলুর পরিমাণ এত চমৎকার ছিল যে অতিথিদের জন্য দুর্দান্ত কাঁকড়ার কষা তৈরি করা গেল। ডেলিভারি কর্মীর ব্যবহার খুবই ভালো এবং উপযুক্ত থার্মাল বক্সে এনেছিলেন। আগামী সপ্তাহে আবার নেব।",
-        verified: true,
-        color: "coral"
-      },
-      {
-        id: "rev-7",
-        author: "Dr. Arindam Bose",
-        author_bn: "ডাঃ অরিন্দম বোস",
-        initials: "AB",
-        location: "Behala Chowrasta · Kolkata",
-        location_bn: "বেহালা চৌরাস্তা · কলকাতা",
-        rating: 5,
-        date: "2026-09-05T10:15:00Z",
-        date_display: "1 month ago",
-        date_display_bn: "১ মাস আগে",
-        order_tag: "Ready-to-Cook Cleaned",
-        order_tag_bn: "পরিচ্ছন্ন কাটিং",
-        category: "cleaning",
-        quote: "Cleaned to perfection and delivered on Sunday morning right on time. Authentic Sundarban mud crabs are hard to get with COD in Behala, Baidya Crab House made it effortless. 5 stars from our family.",
-        quote_bn: "রবিবার সকালে একদম সময়মতো দারুণ পরিষ্কার করে কাটা কাঁকড়া ডেলিভারি পেয়েছি। বেহালায় ঘরে বসে ক্যাশ অন ডেলিভারিতে সুন্দরবনের নদীর কাঁকড়া পাওয়া সত্যিই দারুণ ব্যাপার।",
-        verified: true,
-        color: "teal"
-      }
-    ];
-
-    // Load any user-submitted reviews saved in localStorage
-    function loadSavedUserReviews() {
-      try {
-        const saved = localStorage.getItem('bch_user_reviews');
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed)) return parsed;
+    const averageElement = document.getElementById('googleReviewAverage');
+    const starsElement = document.getElementById('googleReviewStars');
+    const ratingText = document.getElementById('googleReviewRatingText');
+    const countText = document.getElementById('googleReviewCount');
+    const labels = isBn
+      ? {
+          loading: 'গুগল থেকে রিভিউ লোড হচ্ছে…',
+          error: 'এই মুহূর্তে গুগল রিভিউ লোড করা যাচ্ছে না। পরে আবার চেষ্টা করুন।',
+          empty: 'এখনও কোনো গুগল রিভিউ পাওয়া যায়নি।',
+          source: 'গুগল রিভিউ',
+          anonymous: 'গুগল ব্যবহারকারী',
+          count: 'টি গুগল রিভিউ',
+          ratingUnavailable: 'গুগল বিজনেস রেটিং পাওয়া যাচ্ছে না',
+          loaded: 'গুগল থেকে সব রিভিউ দেখানো হচ্ছে।'
         }
-      } catch (e) {}
-      return [];
+      : {
+          loading: 'Loading reviews from Google…',
+          error: 'Google reviews could not be loaded right now. Please try again later.',
+          empty: 'No Google reviews are available yet.',
+          source: 'Google review',
+          anonymous: 'Google user',
+          count: 'Google reviews',
+          ratingUnavailable: 'Google Business rating unavailable',
+          loaded: 'Showing all available reviews from Google.'
+        };
+
+    const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[character]);
+    const ratingValue = value => ({ ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 })[value] || 0;
+    const formatDate = value => {
+      const date = new Date(value);
+      if (!value || Number.isNaN(date.getTime())) return '';
+      return new Intl.DateTimeFormat(isBn ? 'bn-IN' : 'en-IN', { year: 'numeric', month: 'short', day: 'numeric' }).format(date);
+    };
+
+    function updateRating(averageRating, totalReviewCount) {
+      const average = Number(averageRating);
+      const validAverage = Number.isFinite(average) && average >= 0 && average <= 5;
+      const localizedAverage = validAverage
+        ? new Intl.NumberFormat(isBn ? 'bn-IN' : 'en-IN', { maximumFractionDigits: 1 }).format(average)
+        : '';
+      if (averageElement) averageElement.textContent = validAverage ? localizedAverage : '—';
+      if (starsElement) starsElement.textContent = validAverage ? '★'.repeat(Math.round(average)) : '';
+      if (starsElement) starsElement.setAttribute('aria-label', validAverage
+        ? (isBn ? `৫-এর মধ্যে ${localizedAverage}` : `${average.toFixed(1)} out of 5`)
+        : labels.ratingUnavailable);
+      if (ratingText) ratingText.textContent = validAverage
+        ? (isBn ? `৫-এর মধ্যে ${localizedAverage} · গুগল বিজনেস রেটিং` : `${average.toFixed(1)} out of 5 · Google Business rating`)
+        : labels.ratingUnavailable;
+      if (countText) countText.textContent = `${new Intl.NumberFormat(isBn ? 'bn-IN' : 'en-IN').format(totalReviewCount)} ${labels.count}`;
+      if (countBadge) countBadge.textContent = `${isBn ? 'গুগল রিভিউ' : 'Google Reviews'} (${new Intl.NumberFormat(isBn ? 'bn-IN' : 'en-IN').format(totalReviewCount)})`;
     }
 
-    // Initialize list
-    const userReviews = loadSavedUserReviews();
-    allReviews = [...userReviews, ...DEFAULT_REVIEWS];
+    function renderReviews(reviews) {
+      reviewsGrid.setAttribute('aria-busy', 'false');
+      if (reviews.length === 0) {
+        reviewsGrid.textContent = labels.empty;
+        return;
+      }
 
-    // Show temporary toast notification
-    function showToast(message) {
-      if (!toast || !toastMsg) return;
-      toastMsg.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3500);
-    }
-
-    // Render single review card HTML with subtle fade-in animation
-    function buildCardHtml(rev, index = 0, isAnimated = true) {
-      const author = (isBn && rev.author_bn) ? rev.author_bn : rev.author;
-      const location = (isBn && rev.location_bn) ? rev.location_bn : rev.location;
-      const quote = (isBn && rev.quote_bn) ? rev.quote_bn : rev.quote;
-      const tag = (isBn && rev.order_tag_bn) ? rev.order_tag_bn : rev.order_tag;
-      const dateDisplay = (isBn && rev.date_display_bn) ? rev.date_display_bn : rev.date_display;
-      const stars = '★'.repeat(Math.min(5, Math.max(1, rev.rating || 5)));
-      const isNewBadge = rev.is_new ? `<span class="badge-new-review">${isBn ? '✨ নতুন' : '✨ Newest'}</span>` : '';
-      const animClass = isAnimated ? 'fade-in' : '';
-      const cardClass = [
-        'review-card',
-        rev.is_new ? 'is-new' : '',
-        animClass
-      ].filter(Boolean).join(' ');
-      const colorClass = `avatar-${rev.color || 'teal'}`;
-      const delayStyle = isAnimated ? `style="animation-delay: ${(index * 60) + 20}ms;"` : '';
-
-      return `
-        <article class="${cardClass}" ${delayStyle} data-id="${rev.id || ''}">
+      reviewsGrid.innerHTML = reviews.map((review, index) => {
+        const authorName = review.reviewerName || labels.anonymous;
+        const author = escapeHtml(authorName);
+        const initial = escapeHtml(Array.from(authorName.trim())[0] || 'G');
+        const comment = escapeHtml(review.comment || (isBn ? 'লিখিত মন্তব্য নেই।' : 'No written comment.'));
+        const rating = ratingValue(review.starRating);
+        const date = escapeHtml(formatDate(review.updateTime || review.createTime));
+        const stars = '★'.repeat(rating);
+        const delay = Math.min(index, 8) * 40;
+        return `
+          <article class="review-card fade-in" style="animation-delay: ${delay}ms;" data-id="${escapeHtml(review.reviewId)}">
             <div>
-                <div class="review-top">
-                    <div class="review-author">
-                        <div class="review-avatar ${colorClass}">${rev.initials || 'KH'}</div>
-                        <div>
-                            <div class="review-name">${author} ${isNewBadge}</div>
-                            <div class="review-location">${location}</div>
-                        </div>
-                    </div>
-                    <i class="fab fa-google review-google-icon" title="Google Verified Review" aria-hidden="true"></i>
+              <div class="review-top">
+                <div class="review-author">
+                  <div class="review-avatar avatar-teal">${initial}</div>
+                  <div class="review-name">${author}</div>
                 </div>
-                <div class="review-rating-row">
-                    <div class="review-stars" aria-label="${rev.rating || 5} stars">${stars}</div>
-                    <span class="review-badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> ${isBn ? 'ভেরিফাইড ক্রেতা' : 'Verified Buyer'}</span>
-                </div>
-                <p class="review-quote">“${quote}”</p>
+                <i class="fab fa-google review-google-icon" title="Google" aria-hidden="true"></i>
+              </div>
+              <div class="review-rating-row">
+                <div class="review-stars" aria-label="${rating} ${isBn ? 'স্টার' : 'stars'}">${stars}</div>
+                <span class="review-badge">${labels.source}</span>
+              </div>
+              <p class="review-quote">${comment}</p>
             </div>
             <div class="review-footer">
-                <span class="review-order-tag">🦀 ${tag}</span>
-                <span class="review-date">${dateDisplay || (isBn ? 'সম্প্রতি' : 'Recently')}</span>
+              <span class="review-order-tag">${labels.source}</span>
+              <span class="review-date">${date}</span>
             </div>
-        </article>
-      `;
+          </article>`;
+      }).join('');
     }
 
-    // Render cards to grid with transition and subtle fade-in
-    function renderReviews(listToDisplay, animate = true) {
-      if (!reviewsGrid) return;
-
-      if (animate) {
-        reviewsGrid.classList.add('interchanging');
-      }
-
-      setTimeout(() => {
-        let displayList = [...listToDisplay];
-        // By default show first 4 reviews of current view for a balanced, premium layout
-        const visibleReviews = displayList.slice(0, 4);
-        reviewsGrid.innerHTML = visibleReviews.map((rev, idx) => buildCardHtml(rev, idx, animate)).join('');
-        reviewsGrid.classList.remove('interchanging');
-
-        // Update count badge & status
-        if (countBadge) countBadge.textContent = String(allReviews.length);
-        if (statusText) {
-          const totalMsg = isBn
-            ? `${allReviews.length}-টির মধ্যে ৪টি বিশেষ ভেরিফাইড রিভিউ প্রদর্শিত হচ্ছে`
-            : `Showing 4 of ${allReviews.length} verified Kolkata buyer reviews`;
-          statusText.textContent = totalMsg;
-        }
-      }, animate ? 180 : 0);
-    }
-
-    // Filter current list
-    function getFilteredList() {
-      let list = [...allReviews];
-      if (currentFilter === 'newest') {
-        list.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-      }
-      return list;
-    }
-
-    // 1. FETCH NEWEST FUNCTIONALITY
-    async function fetchNewestReviews() {
-      if (btnFetch) {
-        btnFetch.disabled = true;
-        btnFetch.innerHTML = `<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> <span>${isBn ? 'লোড হচ্ছে...' : 'Fetching...'}</span>`;
-      }
-
+    async function loadGoogleReviews() {
+      reviewsGrid.setAttribute('aria-busy', 'true');
+      reviewsGrid.textContent = labels.loading;
       try {
-        const res = await fetch('/api/reviews?sort=newest');
-        if (res.ok) {
-          const data = await res.json();
-          if (data && Array.isArray(data.reviews) && data.reviews.length > 0) {
-            // Merge with local storage reviews
-            const localSaved = loadSavedUserReviews();
-            const merged = [...localSaved];
-            data.reviews.forEach(r => {
-              if (!merged.some(m => m.id === r.id)) merged.push(r);
-            });
-            allReviews = merged;
-          }
-        }
-      } catch (err) {
-        // Fallback: sort locally
-        allReviews.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-      }
+        const response = await fetch('/api/reviews', { cache: 'no-store' });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || labels.error);
+        if (!Array.isArray(data.reviews)) throw new Error('The Google reviews response is invalid.');
 
-      // Mark the very first review as new
-      if (allReviews.length > 0) {
-        allReviews[0].is_new = true;
-      }
-
-      currentFilter = 'newest';
-      // Toggle active states
-      const btnViewAll = document.getElementById('btnViewAll');
-      if (btnViewAll) btnViewAll.classList.remove('active');
-      if (btnFetch) btnFetch.classList.add('active');
-
-      renderReviews(getFilteredList(), true);
-
-      if (btnFetch) {
-        btnFetch.disabled = false;
-        btnFetch.innerHTML = `<i class="fas fa-sync-alt" aria-hidden="true"></i> <span>${isBn ? 'নতুন রিভিউ আনুন' : 'Fetch Newest'}</span>`;
-      }
-
-      showToast(isBn ? '✨ সর্বশেষ নতুন রিভিউ সফলভাবে লোড হয়েছে!' : '✨ Newest customer reviews fetched successfully!');
-    }
-
-    // 2. INTERCHANGE FUNCTIONALITY (Interchange / rotate order of reviews)
-    function interchangeReviews(notify = true) {
-      if (allReviews.length <= 1) return;
-
-      if (btnInterchange) {
-        btnInterchange.classList.add('rotating');
-        setTimeout(() => btnInterchange.classList.remove('rotating'), 500);
-      }
-
-      // Rotate reviews array by 2 positions so that different customer reviews come to the front
-      const shifted = allReviews.splice(0, 2);
-      allReviews.push(...shifted);
-
-      renderReviews(getFilteredList(), true);
-
-      if (notify) {
-        showToast(isBn ? '🔀 রিভিউ অদলবদল (Interchanged) করা হয়েছে!' : '🔀 Reviews interchanged & rotated!');
+        const reviews = data.reviews.slice().sort((left, right) =>
+          new Date(right.updateTime || right.createTime || 0) - new Date(left.updateTime || left.createTime || 0)
+        );
+        updateRating(data.averageRating, data.totalReviewCount ?? reviews.length);
+        renderReviews(reviews);
+        if (statusText) statusText.textContent = labels.loaded;
+      } catch (error) {
+        console.error('Unable to display Google reviews:', error);
+        reviewsGrid.setAttribute('aria-busy', 'false');
+        reviewsGrid.textContent = labels.error;
+        if (statusText) statusText.textContent = labels.error;
+        if (countText) countText.textContent = labels.error;
       }
     }
 
-    // Attach Event Listeners
-    const btnViewAll = document.getElementById('btnViewAll');
-    if (btnViewAll) {
-      btnViewAll.addEventListener('click', () => {
-        if (btnFetch) btnFetch.classList.remove('active');
-        btnViewAll.classList.add('active');
-        currentFilter = 'all';
-        renderReviews(getFilteredList(), true);
-      });
-    }
-
-    if (btnFetch) {
-      btnFetch.addEventListener('click', () => fetchNewestReviews());
-    }
-
-    if (btnInterchange) {
-      btnInterchange.addEventListener('click', () => interchangeReviews(true));
-    }
-
-    // Initial render
-    renderReviews(getFilteredList(), false);
+    loadGoogleReviews();
   }
 
   // --- 8. Execution ---
@@ -1039,5 +796,5 @@ document.addEventListener('DOMContentLoaded', function () {
   initImageCarousels();
   initCatalogueFiltering();
   initSmoothScrolling();
-  initReviewsInterchange();
+  initGoogleReviews();
 });

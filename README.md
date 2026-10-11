@@ -51,6 +51,27 @@ npm start
 
 The application will be running at [http://localhost:3000](http://localhost:3000).
 
+## Google Reviews
+
+The English and Bengali home pages load reviews from the Google Business Profile API. The server requests every review page (newest updates first) and caches the result for five minutes. Review text is not translated; each review is shown in its original language and attributed to Google.
+
+### Google API setup
+
+This integration requires Google Business Profile API access and authorization from an account owner or manager. Google may require the Cloud project to be approved for Business Profile API access before these requests will work.
+
+1. In Google Cloud Console, create or select a project, enable the applicable Business Profile APIs, configure the OAuth consent screen, and create OAuth client credentials.
+2. Authorize the Google account that manages the business location using the `https://www.googleapis.com/auth/business.manage` scope and obtain an OAuth refresh token. Keep the client secret and refresh token private.
+3. Find the Business Profile account ID and location ID for Baidya Crab House. Either a bare ID or the resource name (for example, `accounts/123456` and `locations/789012`) is accepted.
+4. Add these environment variables to the Vercel project under **Settings → Environment Variables**:
+   - `GOOGLE_OAUTH_CLIENT_ID`
+   - `GOOGLE_OAUTH_CLIENT_SECRET`
+   - `GOOGLE_OAUTH_REFRESH_TOKEN`
+   - `GOOGLE_BUSINESS_ACCOUNT_ID`
+   - `GOOGLE_BUSINESS_LOCATION_ID`
+5. Select the required deployment environments and redeploy. The home page will then display the rating, review count, and all reviews returned by the authorized Google API. Without this configuration, the review panel reports that reviews could not be loaded and links customers to the Google profile.
+
+For local development, set the same environment variables in the shell before running `npm run dev`. Never put OAuth credentials or refresh tokens in frontend code, source control, or the public Blob store.
+
 ## Price & Inventory Admin
 
 Open `/admin` to update product grade prices and availability. The admin API validates all changes server-side.
@@ -76,7 +97,7 @@ For local development, set `ADMIN_PASSWORD` and `ADMIN_SESSION_SECRET` before st
 ## 📁 Architecture on Vercel
 
 - **Edge CDN Static Assets**: High-speed global edge serving for `index.html`, `products.html`, `about.html`, `contact.html`, `bn/` (Bengali language pages), `style.css`, `scripts.js`, and `images/`.
-- **Serverless API Routes**: `api/reviews.js` handles customer reviews; `api/prices.js` serves current prices; protected `api/admin-session.js` and `api/admin-prices.js` handle admin sign-in and price updates.
+- **Serverless API Routes**: `api/reviews.js` securely fetches Google Business Profile reviews; `api/prices.js` serves current prices; protected `api/admin-session.js` and `api/admin-prices.js` handle admin sign-in and price updates.
 - **Persistent Price Storage**: Product price and inventory changes are stored in Vercel Blob and served to both storefront language versions.
 - **Clean URLs**: Configured via `vercel.json` (`cleanUrls: true`) so pages can be accessed cleanly without `.html` extensions.
 - **Security & Caching Headers**: Includes headers for strict security (`X-Frame-Options`, `X-Content-Type-Options`, `X-XSS-Protection`) and performance caching.

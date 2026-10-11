@@ -27,7 +27,6 @@
   ],
   "functions": {
     "api/reviews.js": {
-      "includeFiles": "public/reviews.json",
       "maxDuration": 10
     },
     "api/admin-prices.js": {
