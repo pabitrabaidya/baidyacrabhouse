@@ -46,7 +46,7 @@ export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, HEAD, OPTIONS');
   res.setHeader(
     'Access-Control-Allow-Headers',
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
@@ -60,8 +60,12 @@ export default async function handler(req, res) {
     loadReviews();
   }
 
-  // GET: Fetch reviews with sorting, filtering, or interchanging/shuffling
-  if (req.method === 'GET') {
+  // GET / HEAD: Fetch reviews
+  if (req.method === 'GET' || req.method === 'HEAD') {
+    if (req.method === 'HEAD') {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      return res.status(200).end();
+    }
     const query = req.query || {};
     const sort = query.sort;
     const category = query.category;

@@ -32,11 +32,7 @@ app.get('/bn', (req, res) => {
   res.sendFile(path.join(__dirname, 'bn', 'index.html'));
 });
 
-// Start server on 0.0.0.0:3000 if executed directly
-if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
-  app.listen(Number(PORT), HOST, () => {
-    console.log(`Baidya Crab House server running on http://${HOST}:${PORT}`);
-  });
-}
-
-export default app;
+// Start local development server
+app.listen(Number(PORT), HOST, () => {
+  console.log(`Baidya Crab House local dev server running on http://${HOST}:${PORT}`);
+});
