@@ -51,9 +51,10 @@
             "image": "https://www.baidyacrabhouse.com/images/crabegg.png",
             "description": "Standard Grade Female — Guaranteed Egg (ghilu). Sourced fresh daily from the Sundarbans.",
             "offers": {
-              "@type": "Offer",
+              "@type": "AggregateOffer",
               "priceCurrency": "INR",
-              "price": "699"
+              "lowPrice": "599",
+              "highPrice": "1099"
             }
           }
         },
@@ -68,8 +69,8 @@
             "offers": {
               "@type": "AggregateOffer",
               "priceCurrency": "INR",
-              "lowPrice": "349",
-              "highPrice": "1099"
+              "lowPrice": "399",
+              "highPrice": "1199"
             }
           }
         }
@@ -170,12 +171,15 @@
                             <label class="sr-only" for="grade-female">Select Grade</label>
                             <select class="grade-select" id="grade-female" aria-label="Select size or grade for female mud crab">
                                 <option value="">Select size / grade</option>
-                                <option value="F1">F1 — Large (180g+)</option>
-                                <option value="F2">F2 — Medium (150g+)</option>
-                                <option value="F3">F3 — Regular (100g+)</option>
+                                <option value="SGF">SGF — Standard Grade Female (5 pcs/kg)</option>
+                                <option value="SGF2">SGF 2 — Standard Grade Female (6 pcs/kg)</option>
+                                <option value="F1">F1 — Guaranteed Ghilu (7 pcs/kg)</option>
+                                <option value="F2">F2 — Guaranteed Ghilu (8 pcs/kg)</option>
+                                <option value="F3">F3 — Guaranteed Ghilu (9 pcs/kg)</option>
+                                <option value="MFC">MFC — Male + Female Combo (5 pcs/kg, 2 female)</option>
                             </select>
                             <div class="price-container">
-                                <span class="price">From ₹699 / kg</span>
+                                <span class="price">From ₹599 / kg</span>
                             </div>
                             <div class="order-btn">
                                 <a class="btn btn-whatsapp" target="_blank" rel="noopener noreferrer"
@@ -214,16 +218,15 @@
                             <label class="sr-only" for="grade-male">Select Grade</label>
                             <select class="grade-select" id="grade-male" aria-label="Select size or grade for male mud crab">
                                 <option value="">Select size / grade</option>
-                                <option value="XXL500">XXL500 — Jumbo (500g+)</option>
-                                <option value="XL400">XL400 — Extra Large (400g+)</option>
-                                <option value="L300">L300 — Large (300g+)</option>
-                                <option value="M200">M200 — Medium (200g+)</option>
-                                <option value="SM150">SM150 — Small-Med (150g+)</option>
-                                <option value="SSM100">SSM100 — Small (100g+)</option>
-                                <option value="80_UP">80 UP — Entry (80g+)</option>
+                                <option value="XXLC">XXLC — Extra Extra Large Combo (2 pcs/kg)</option>
+                                <option value="XLC">XLC — Extra Large Combo (3 pcs/kg)</option>
+                                <option value="LC">LC — Large Combo (4 pcs/kg)</option>
+                                <option value="MC">MC — Medium Combo (5 pcs/kg)</option>
+                                <option value="SC">SC — Small Combo (7 pcs/kg)</option>
+                                <option value="MALE_FEMALE_COMBO">Male + Female Combo (13 pcs)</option>
                             </select>
                             <div class="price-container">
-                                <span class="price">From ₹349 / kg</span>
+                                <span class="price">From ₹399 / kg</span>
                             </div>
                             <div class="order-btn">
                                 <a class="btn btn-whatsapp" target="_blank" rel="noopener noreferrer"
@@ -269,7 +272,8 @@
                 </article>
 
                 <!-- 4. Blue Crab (Out of stock) -->
-                <article class="product-card" id="blue_crab" data-id="blue_crab" data-out-of-stock="true">
+                <article class="product-card" id="blue_crab" data-id="blue_crab" data-out-of-stock="true"
+                    data-available-description="Seasonal Andaman blue swimming crabs are available from today's catch. Contact us to confirm sizes and stock.">
                     <div class="product-media">
                         <img id="blue-main" class="main-img" src="images/blue_crab.jpg" alt="Blue Crab — Seasonal"
                             loading="lazy">
@@ -298,7 +302,8 @@
                 </article>
 
                 <!-- 5. Sea Crab (Out of stock) -->
-                <article class="product-card" id="sea_crab" data-id="sea_crab" data-out-of-stock="true">
+                <article class="product-card" id="sea_crab" data-id="sea_crab" data-out-of-stock="true"
+                    data-available-description="Fresh sea crabs are available from today's catch. Contact us to confirm sizes and stock.">
                     <div class="product-media">
                         <img id="sea-main" class="main-img" src="images/sea_crab.jpg" alt="Sea Crab — Seasonal" loading="lazy">
                         <span class="img-badge out-of-stock">Seasonal</span>

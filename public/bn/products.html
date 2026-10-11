@@ -50,8 +50,8 @@
             "offers": {
               "@type": "AggregateOffer",
               "priceCurrency": "INR",
-              "lowPrice": "349",
-              "highPrice": "1099"
+              "lowPrice": "399",
+              "highPrice": "1199"
             }
           }
         },
@@ -64,9 +64,10 @@
             "image": "https://www.baidyacrabhouse.com/images/crabegg.png",
             "description": "১০০% ঘিলু যুক্ত টাটকা মহিলা কাঁকড়া, প্রিমিয়াম কোয়ালিটি ও ফ্রেশ স্টক।",
             "offers": {
-              "@type": "Offer",
+              "@type": "AggregateOffer",
               "priceCurrency": "INR",
-              "price": "699"
+              "lowPrice": "599",
+              "highPrice": "1099"
             }
           }
         }
@@ -170,12 +171,15 @@
                             <label class="sr-only" for="grade-female-bn">আকার বা গ্রেড</label>
                             <select class="grade-select" id="grade-female-bn" aria-label="মহিলা কাঁকড়ার আকার নির্বাচন করুন">
                                 <option value="">আকার / গ্রেড নির্বাচন করুন</option>
-                                <option value="F1">F1 — বড় সাইজ (১৮০ গ্রাম+)</option>
-                                <option value="F2">F2 — মাঝারি সাইজ (১৫০ গ্রাম+)</option>
-                                <option value="F3">F3 — সাধারণ সাইজ (১০০ গ্রাম+)</option>
+                                <option value="SGF">SGF — স্ট্যান্ডার্ড গ্রেড ফিমেল (৫ পিস/কেজি)</option>
+                                <option value="SGF2">SGF 2 — স্ট্যান্ডার্ড গ্রেড ফিমেল (৬ পিস/কেজি)</option>
+                                <option value="F1">F1 — ঘিলু ভরা (৭ পিস/কেজি)</option>
+                                <option value="F2">F2 — ঘিলু ভরা (৮ পিস/কেজি)</option>
+                                <option value="F3">F3 — ঘিলু ভরা (৯ পিস/কেজি)</option>
+                                <option value="MFC">MFC — মেল + ফিমেল কম্বো (৫ পিস/কেজি, ২টি ফিমেল)</option>
                             </select>
                             <div class="price-container">
-                                <span class="price">₹৬৯৯ / কেজি থেকে শুরু</span>
+                                <span class="price">₹৫৯৯ / কেজি থেকে শুরু</span>
                             </div>
                             <div class="order-btn">
                                 <a class="btn btn-whatsapp" target="_blank" rel="noopener noreferrer"
@@ -214,16 +218,15 @@
                             <label class="sr-only" for="grade-male-bn">আকার বা গ্রেড</label>
                             <select class="grade-select" id="grade-male-bn" aria-label="পুরুষ কাঁকড়ার আকার নির্বাচন করুন">
                                 <option value="">আকার / গ্রেড নির্বাচন করুন</option>
-                                <option value="XXL500">XXL500 — জাম্বো (৫০০ গ্রাম+)</option>
-                                <option value="XL400">XL400 — এক্সট্রা লার্জ (৪০০ গ্রাম+)</option>
-                                <option value="L300">L300 — লার্জ (৩০০ গ্রাম+)</option>
-                                <option value="M200">M200 — মিডিয়াম (২০০ গ্রাম+)</option>
-                                <option value="SM150">SM150 — ছোট-মাঝারি (১৫০ গ্রাম+)</option>
-                                <option value="SSM100">SSM100 — ছোট (১০০ গ্রাম+)</option>
-                                <option value="80_UP">80 UP — প্রারম্ভিক (৮০ গ্রাম+)</option>
+                                <option value="XXLC">XXLC — এক্সট্রা এক্সট্রা লার্জ কম্বো (২ পিস/কেজি)</option>
+                                <option value="XLC">XLC — এক্সট্রা লার্জ কম্বো (৩ পিস/কেজি)</option>
+                                <option value="LC">LC — লার্জ কম্বো (৪ পিস/কেজি)</option>
+                                <option value="MC">MC — মিডিয়াম কম্বো (৫ পিস/কেজি)</option>
+                                <option value="SC">SC — স্মল কম্বো (৭ পিস/কেজি)</option>
+                                <option value="MALE_FEMALE_COMBO">মেল + ফিমেল কম্বো (১৩ পিস)</option>
                             </select>
                             <div class="price-container">
-                                <span class="price">₹৩৪৯ / কেজি থেকে শুরু</span>
+                                <span class="price">₹৩৯৯ / কেজি থেকে শুরু</span>
                             </div>
                             <div class="order-btn">
                                 <a class="btn btn-whatsapp" target="_blank" rel="noopener noreferrer"
@@ -269,7 +272,8 @@
                 </article>
 
                 <!-- 4. Blue Crab (Out of stock) -->
-                <article class="product-card" id="blue_crab" data-id="blue_crab" data-out-of-stock="true">
+                <article class="product-card" id="blue_crab" data-id="blue_crab" data-out-of-stock="true"
+                    data-available-description-bn="আজকের ক্যাচে মৌসুমি আন্দামান নীল কাঁকড়া পাওয়া যাচ্ছে। সাইজ ও স্টক নিশ্চিত করতে যোগাযোগ করুন।">
                     <div class="product-media">
                         <img id="blue-main-bn" class="main-img" src="../images/blue_crab.jpg" alt="ব্লু কাঁকড়া" loading="lazy">
                         <span class="img-badge out-of-stock">মৌসুমি</span>
@@ -297,7 +301,8 @@
                 </article>
 
                 <!-- 5. Sea Crab (Out of stock) -->
-                <article class="product-card" id="sea_crab" data-id="sea_crab" data-out-of-stock="true">
+                <article class="product-card" id="sea_crab" data-id="sea_crab" data-out-of-stock="true"
+                    data-available-description-bn="আজকের ক্যাচে টাটকা সি কাঁকড়া পাওয়া যাচ্ছে। সাইজ ও স্টক নিশ্চিত করতে যোগাযোগ করুন।">
                     <div class="product-media">
                         <img id="sea-main-bn" class="main-img" src="../images/sea_crab.jpg" alt="সি কাঁকড়া" loading="lazy">
                         <span class="img-badge out-of-stock">মৌসুমি</span>

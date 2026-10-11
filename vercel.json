@@ -5,6 +5,18 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/api/prices",
+      "destination": "/api/prices.js"
+    },
+    {
+      "source": "/api/admin/session",
+      "destination": "/api/admin-session.js"
+    },
+    {
+      "source": "/api/admin/prices",
+      "destination": "/api/admin-prices.js"
+    },
+    {
       "source": "/api/reviews",
       "destination": "/api/reviews.js"
     },
@@ -16,6 +28,16 @@
   "functions": {
     "api/reviews.js": {
       "includeFiles": "public/reviews.json",
+      "maxDuration": 10
+    },
+    "api/admin-prices.js": {
+      "maxDuration": 10
+    },
+    "api/prices.js": {
+      "includeFiles": "public/prices.json",
+      "maxDuration": 10
+    },
+    "api/admin-session.js": {
       "maxDuration": 10
     }
   },

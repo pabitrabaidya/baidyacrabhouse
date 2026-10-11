@@ -1,41 +1,43 @@
 {
-  "last_updated": "2026-10-10",
+  "last_updated": "2026-10-12",
   "currency": "INR",
   "products": [
     {
       "id": "mud_crab_female",
-      "name": "Mud Crab — Female (Full Ghilu)",
+      "name": "Mud Crab — Female",
       "name_bn": "মাড কাঁকড়া — মহিলা (ঘিলু ভরা)",
-      "price": 699,
-      "starting_price": 699,
-      "price_range": "₹699 – ₹899",
+      "price": 599,
+      "starting_price": 599,
+      "price_range": "₹599 – ₹1,099",
       "unit": " / kg",
       "unit_bn": " / কেজি",
       "in_stock": true,
       "grades": {
-        "F1": 899,
-        "F2": 799,
-        "F3": 699
+        "SGF": 1099,
+        "SGF2": 949,
+        "F1": 750,
+        "F2": 699,
+        "F3": 599,
+        "MFC": 749
       }
     },
     {
       "id": "mud_crab_male",
       "name": "Mud Crab — Male",
       "name_bn": "মাড কাঁকড়া — পুরুষ",
-      "price": 349,
-      "starting_price": 349,
-      "price_range": "₹349 – ₹1,099",
+      "price": 399,
+      "starting_price": 399,
+      "price_range": "₹399 – ₹1,199",
       "unit": " / kg",
       "unit_bn": " / কেজি",
       "in_stock": true,
       "grades": {
-        "XXL500": 1099,
-        "XL400": 999,
-        "L300": 699,
-        "M200": 599,
-        "SM150": 499,
-        "SSM100": 449,
-        "80_UP": 349
+        "XXLC": 1199,
+        "XLC": 899,
+        "LC": 699,
+        "MC": 599,
+        "SC": 499,
+        "MALE_FEMALE_COMBO": 399
       }
     },
     {

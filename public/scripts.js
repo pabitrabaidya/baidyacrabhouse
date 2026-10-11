@@ -101,43 +101,45 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // --- 3. Synchronized Pricing Data & Dynamic Updating ---
   const FALLBACK_PRICES = {
-    last_updated: '2026-10-10',
+    last_updated: '2026-10-12',
     currency: 'INR',
     products: [
       {
         id: 'mud_crab_female',
-        name: 'Mud Crab — Female (Full Ghilu)',
+        name: 'Mud Crab — Female',
         name_bn: 'মাড কাঁকড়া — মহিলা (ঘিলু ভরা)',
-        price: 699,
-        starting_price: 699,
-        price_range: '₹699 – ₹899',
+        price: 599,
+        starting_price: 599,
+        price_range: '₹599 – ₹1,099',
         unit: ' / kg',
         unit_bn: ' / কেজি',
         in_stock: true,
         grades: {
-          F1: 899,
-          F2: 799,
-          F3: 699
+          SGF: 1099,
+          SGF2: 949,
+          F1: 750,
+          F2: 699,
+          F3: 599,
+          MFC: 749
         }
       },
       {
         id: 'mud_crab_male',
         name: 'Mud Crab — Male',
         name_bn: 'মাড কাঁকড়া — পুরুষ',
-        price: 349,
-        starting_price: 349,
-        price_range: '₹349 – ₹1,099',
+        price: 399,
+        starting_price: 399,
+        price_range: '₹399 – ₹1,199',
         unit: ' / kg',
         unit_bn: ' / কেজি',
         in_stock: true,
         grades: {
-          XXL500: 1099,
-          XL400: 999,
-          L300: 699,
-          M200: 599,
-          SM150: 499,
-          SSM100: 449,
-          '80_UP': 349
+          XXLC: 1199,
+          XLC: 899,
+          LC: 699,
+          MC: 599,
+          SC: 499,
+          MALE_FEMALE_COMBO: 399
         }
       },
       {
@@ -213,19 +215,32 @@ document.addEventListener('DOMContentLoaded', function () {
     return `https://api.whatsapp.com/send?phone=${BUSINESS_PHONE}&text=${encodeURIComponent(msg)}`;
   }
 
+  function setOrderButton(anchor, label, isOutOfStock) {
+    anchor.classList.toggle('secondary', isOutOfStock);
+    anchor.classList.toggle('btn-whatsapp', !isOutOfStock);
+    const icon = document.createElement('i');
+    icon.className = 'fab fa-whatsapp';
+    icon.setAttribute('aria-hidden', 'true');
+    anchor.replaceChildren(icon, document.createTextNode(` ${label}`));
+  }
+
   async function fetchPrices() {
-    const candidates = ['prices.json', '../prices.json', '../../prices.json'];
+    const candidates = ['/api/prices', 'prices.json', '../prices.json', '../../prices.json'];
     for (const path of candidates) {
       try {
         const res = await fetch(path, { cache: 'no-cache' });
-        if (res.ok) {
-          const json = await res.json();
-          if (json && Array.isArray(json.products) && json.products.length > 0) {
-            return json;
+        if (!res.ok) {
+          if (path === '/api/prices') {
+            console.error(`Pricing API returned ${res.status}; trying the static price file.`);
           }
+          continue;
+        }
+        const json = await res.json();
+        if (json && Array.isArray(json.products) && json.products.length > 0) {
+          return json;
         }
       } catch (err) {
-        // try next path candidate
+        console.error(`Unable to load pricing from ${path}:`, err);
       }
     }
     return FALLBACK_PRICES;
@@ -257,13 +272,32 @@ document.addEventListener('DOMContentLoaded', function () {
       const p = products.find(item => item.id === pid);
       if (!p) return;
 
-      const isOut = card.dataset.outOfStock === 'true' || p.in_stock === false;
+      const isOut = p.in_stock === false;
       const priceEl = card.querySelector('.price');
       const gradeSelect = card.querySelector('.grade-select');
       const orderBtnAnchor = card.querySelector('.order-btn a.btn') || card.querySelector('a.btn');
       const cardTitle = card.querySelector('h3, h4')?.textContent?.trim() || (isBengali ? p.name_bn : p.name);
 
       const unitText = isBengali ? (p.unit_bn || ' / কেজি') : (p.unit || ' / kg');
+      if (gradeSelect) {
+        gradeSelect.disabled = isOut;
+        const existingGrades = new Set();
+        gradeSelect.querySelectorAll('option').forEach(option => {
+          if (option.value) existingGrades.add(option.value);
+          if (p.grades?.[option.value] == null) return;
+          option.textContent = option.textContent.replace(
+            /₹\s*[\d,০-৯]+(?:\s*\/\s*(?:kg|কেজি))?/g,
+            formatter.format(p.grades[option.value])
+          );
+        });
+        Object.entries(p.grades || {}).forEach(([grade, price]) => {
+          if (existingGrades.has(grade)) return;
+          const option = document.createElement('option');
+          option.value = grade;
+          option.textContent = `${grade} (${formatter.format(price)}${unitText})`;
+          gradeSelect.append(option);
+        });
+      }
 
       // Update Stock and Price Display
       if (isOut) {
@@ -275,20 +309,36 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         if (gradeSelect) gradeSelect.disabled = true;
 
-        const badgeEl = card.querySelector('.badge');
+        const badgeEl = card.querySelector('.badge, .img-badge');
         if (badgeEl) {
           badgeEl.textContent = isBengali ? 'স্টক শেষ' : 'Out of Stock';
-          badgeEl.className = 'badge badge-out-of-stock';
+          badgeEl.className = badgeEl.classList.contains('img-badge')
+            ? 'img-badge out-of-stock'
+            : 'badge badge-out-of-stock';
         }
 
         if (orderBtnAnchor) {
-          orderBtnAnchor.classList.add('secondary');
-          orderBtnAnchor.textContent = isBengali ? 'স্টক সম্পর্কে জানুন' : 'Enquire Restock';
+          setOrderButton(orderBtnAnchor, isBengali ? 'স্টক সম্পর্কে জানুন' : 'Enquire Restock', true);
           orderBtnAnchor.setAttribute('href', buildWhatsAppUrl(cardTitle, '', true));
           orderBtnAnchor.setAttribute('target', '_blank');
           orderBtnAnchor.setAttribute('rel', 'noopener noreferrer');
         }
         return;
+      }
+
+      const badgeEl = card.querySelector('.badge, .img-badge');
+      if (badgeEl && badgeEl.classList.contains('out-of-stock')) {
+        badgeEl.textContent = isBengali ? 'তাজা' : 'Fresh';
+        badgeEl.className = badgeEl.classList.contains('img-badge')
+          ? 'img-badge fresh'
+          : 'badge badge-live';
+      }
+      const availableDescription = isBengali
+        ? card.dataset.availableDescriptionBn
+        : card.dataset.availableDescription;
+      const description = card.querySelector('.product-body > p');
+      if (!isOut && availableDescription && description) {
+        description.textContent = availableDescription;
       }
 
       // In stock: set initial price display
@@ -308,6 +358,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Initial WhatsApp order link
       if (orderBtnAnchor) {
+        setOrderButton(orderBtnAnchor, isBengali ? 'WhatsApp-এ অর্ডার' : 'Enquire on WhatsApp', false);
         orderBtnAnchor.setAttribute('href', buildWhatsAppUrl(cardTitle, '', false));
         orderBtnAnchor.setAttribute('target', '_blank');
         orderBtnAnchor.setAttribute('rel', 'noopener noreferrer');

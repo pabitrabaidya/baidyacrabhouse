@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Price &amp; Inventory Admin | Baidya Crab House</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-page">
+    <main class="admin-shell">
+        <a class="admin-back-link" href="/products.html">&larr; Back to products</a>
+        <header class="admin-header">
+            <div>
+                <span class="admin-eyebrow">BAIDYA CRAB HOUSE</span>
+                <h1>Price &amp; Inventory</h1>
+                <p>Update grade prices and stock status shown on both language versions.</p>
+            </div>
+            <button type="button" class="btn secondary admin-logout" id="adminLogout" hidden>Sign out</button>
+        </header>
+
+        <section class="admin-panel" id="adminSetup" hidden>
+            <h2>Admin setup required</h2>
+            <p>The server needs an admin password, session secret, and persistent price storage before this page can be used.</p>
+            <p>See the deployment setup instructions in the project README.</p>
+        </section>
+
+        <section class="admin-panel admin-login-panel" id="adminLoginPanel" hidden>
+            <h2>Sign in</h2>
+            <p>Enter the server-configured admin password to manage prices and inventory.</p>
+            <form id="adminLoginForm">
+                <label for="adminPassword">Admin password</label>
+                <input id="adminPassword" name="password" type="password" autocomplete="current-password" required>
+                <button class="btn primary" type="submit">Sign in</button>
+            </form>
+            <p id="adminLoginStatus" class="admin-status" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="admin-panel" id="adminPricesPanel" hidden>
+            <div class="admin-panel-heading">
+                <div>
+                    <h2>Products</h2>
+                    <p>Prices are in Indian rupees per kilogram.</p>
+                </div>
+                <span id="adminLastUpdated" class="admin-updated"></span>
+            </div>
+            <form id="adminPricesForm">
+                <div id="adminProductList" class="admin-product-list"></div>
+                <div class="admin-save-row">
+                    <p id="adminStatus" class="admin-status" role="status" aria-live="polite"></p>
+                    <button class="btn primary" type="submit" id="adminSaveButton">Save updates</button>
+                </div>
+            </form>
+        </section>
+    </main>
+    <script src="admin.js" defer></script>
+</body>
+</html>

@@ -883,7 +883,8 @@ html[lang="bn"] .page-hero p {
   line-height: 1.5;
   margin-bottom: 0.75rem;
 }
-.product-card .weight {
+.product-card .weight,
+.product-card .size-range {
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--teal-accent);
@@ -2045,5 +2046,170 @@ html[lang="bn"] .page-hero p {
   .nav-brand-text,
   html[lang="bn"] .nav-brand-text {
     font-size: 0.9rem;
+  }
+}
+
+/* ── Admin Price & Inventory Page ── */
+.admin-page {
+  background: var(--bg-page);
+}
+.admin-shell {
+  width: min(920px, calc(100% - 2rem));
+  margin: 2.5rem auto;
+}
+.admin-back-link {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  color: var(--teal-accent);
+  font-weight: 600;
+}
+.admin-header,
+.admin-panel-heading,
+.admin-save-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.admin-header {
+  margin-bottom: 1.5rem;
+}
+.admin-eyebrow {
+  color: var(--coral-accent);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+.admin-header h1 {
+  margin: 0.25rem 0;
+  color: var(--navy-dark);
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+}
+.admin-header p,
+.admin-panel > p,
+.admin-panel-heading p {
+  color: var(--text-muted);
+}
+.admin-panel {
+  margin-bottom: 1.25rem;
+  padding: clamp(1rem, 4vw, 1.75rem);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.admin-panel h2 {
+  margin-bottom: 0.35rem;
+  color: var(--navy-dark);
+}
+.admin-login-panel form {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 400px;
+  margin-top: 1.25rem;
+}
+.admin-login-panel input,
+.admin-grade-price {
+  min-width: 0;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  font: inherit;
+}
+.admin-login-panel .btn {
+  justify-self: start;
+}
+.admin-product-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.admin-product {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+}
+.admin-product legend {
+  padding: 0 0.4rem;
+  color: var(--navy-dark);
+  font-weight: 700;
+}
+.admin-stock-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0.25rem 0 1rem;
+  color: var(--text-main);
+  font-weight: 600;
+}
+.admin-stock-toggle input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--whatsapp-dark);
+}
+.admin-grade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+}
+.admin-grade-field > span:first-child {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.admin-price-field {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.admin-price-field > span {
+  padding-left: 0.7rem;
+  color: var(--text-muted);
+}
+.admin-grade-price {
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+}
+.admin-updated {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+.admin-save-row {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-light);
+}
+.admin-status {
+  min-height: 1.5em;
+  color: var(--whatsapp-dark);
+  font-weight: 600;
+}
+.admin-status.error {
+  color: #b42318;
+}
+.admin-logout {
+  flex-shrink: 0;
+}
+.admin-page button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+@media (max-width: 560px) {
+  .admin-shell {
+    margin: 1.25rem auto;
+  }
+  .admin-header,
+  .admin-panel-heading,
+  .admin-save-row {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
