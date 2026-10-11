@@ -1273,7 +1273,7 @@ html[lang="bn"] .page-hero p {
   margin-top: auto;
   background: var(--navy-dark);
   color: rgba(255, 255, 255, 0.75);
-  padding: 3.5rem 1.5rem 2rem;
+  padding: 3.5rem 1.5rem 5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 .footer-inner {
@@ -2117,6 +2117,8 @@ html[lang="bn"] .page-hero p {
   .floating-whatsapp-btn {
     padding: 0.75rem;
     border-radius: 50%;
+    bottom: 5rem;
+    right: 1rem;
   }
 }
 
