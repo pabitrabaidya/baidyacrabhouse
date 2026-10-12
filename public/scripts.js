@@ -662,66 +662,79 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // --- 7. Google Business Profile Reviews ---
-  function initGoogleReviews() {
+  // --- 7. Customer Reviews ---
+  function initCustomerReviews() {
     const reviewsGrid = document.getElementById('reviewsGridContainer');
     if (!reviewsGrid) return;
 
-    const isBn = document.documentElement.lang === 'bn' || window.location.pathname.includes('/bn/');
+    const isBn = document.documentElement.lang === 'bn';
     const countBadge = document.getElementById('reviewsCountBadge');
     const statusText = document.getElementById('reviewsStatusText');
-    const averageElement = document.getElementById('googleReviewAverage');
-    const starsElement = document.getElementById('googleReviewStars');
-    const ratingText = document.getElementById('googleReviewRatingText');
-    const countText = document.getElementById('googleReviewCount');
+    const averageElement = document.getElementById('customerReviewAverage');
+    const starsElement = document.getElementById('customerReviewStars');
+    const ratingText = document.getElementById('customerReviewRatingText');
+    const countText = document.getElementById('customerReviewCount');
+    const rotationToggle = document.getElementById('reviewsRotationToggle');
+    const rotationLabel = rotationToggle?.querySelector('span');
+    const rotationIcon = rotationToggle?.querySelector('i');
+    const ROTATION_INTERVAL_MS = 7000;
+    let allReviews = [];
+    let pageSize = 0;
+    let pageIndex = 0;
+    let rotationTimer;
+    let renderTimer;
+    let resizeTimer;
+    let rotationPaused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let interactionPaused = false;
     const labels = isBn
       ? {
-          loading: 'গুগল থেকে রিভিউ লোড হচ্ছে…',
-          error: 'এই মুহূর্তে গুগল রিভিউ লোড করা যাচ্ছে না। পরে আবার চেষ্টা করুন।',
-          empty: 'এখনও কোনো গুগল রিভিউ পাওয়া যায়নি।',
-          source: 'গুগল রিভিউ',
-          anonymous: 'গুগল ব্যবহারকারী',
-          count: 'টি গুগল রিভিউ',
-          ratingUnavailable: 'গুগল বিজনেস রেটিং পাওয়া যাচ্ছে না',
-          loaded: 'গুগল থেকে সব রিভিউ দেখানো হচ্ছে।'
+          loading: 'গ্রাহকদের রিভিউ লোড হচ্ছে…',
+          error: 'গ্রাহকদের রিভিউ লোড করা যাচ্ছে না। পরে আবার চেষ্টা করুন।',
+          empty: 'এখনও কোনো গ্রাহক রিভিউ নেই।',
+          customerReview: 'গ্রাহক রিভিউ',
+          verifiedCustomer: 'যাচাইকৃত গ্রাহক',
+          count: 'টি গ্রাহক রিভিউ',
+          ratingUnavailable: 'গ্রাহক রেটিং পাওয়া যাচ্ছে না',
+          loaded: 'সংরক্ষিত গ্রাহক রিভিউ দেখানো হচ্ছে।',
+          pauseRotation: 'পরিবর্তন থামান',
+          resumeRotation: 'পরিবর্তন চালু করুন'
         }
       : {
-          loading: 'Loading reviews from Google…',
-          error: 'Google reviews could not be loaded right now. Please try again later.',
-          empty: 'No Google reviews are available yet.',
-          source: 'Google review',
-          anonymous: 'Google user',
-          count: 'Google reviews',
-          ratingUnavailable: 'Google Business rating unavailable',
-          loaded: 'Showing all available reviews from Google.'
+          loading: 'Loading customer reviews…',
+          error: 'Customer reviews could not be loaded right now. Please try again later.',
+          empty: 'There are no customer reviews yet.',
+          customerReview: 'Customer review',
+          verifiedCustomer: 'Verified customer',
+          count: 'customer reviews',
+          ratingUnavailable: 'Customer rating unavailable',
+          loaded: 'Showing saved customer reviews.',
+          pauseRotation: 'Pause rotation',
+          resumeRotation: 'Resume rotation'
         };
 
     const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
     })[character]);
-    const ratingValue = value => ({ ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 })[value] || 0;
-    const formatDate = value => {
-      const date = new Date(value);
-      if (!value || Number.isNaN(date.getTime())) return '';
-      return new Intl.DateTimeFormat(isBn ? 'bn-IN' : 'en-IN', { year: 'numeric', month: 'short', day: 'numeric' }).format(date);
-    };
 
-    function updateRating(averageRating, totalReviewCount) {
-      const average = Number(averageRating);
-      const validAverage = Number.isFinite(average) && average >= 0 && average <= 5;
-      const localizedAverage = validAverage
-        ? new Intl.NumberFormat(isBn ? 'bn-IN' : 'en-IN', { maximumFractionDigits: 1 }).format(average)
-        : '';
-      if (averageElement) averageElement.textContent = validAverage ? localizedAverage : '—';
-      if (starsElement) starsElement.textContent = validAverage ? '★'.repeat(Math.round(average)) : '';
-      if (starsElement) starsElement.setAttribute('aria-label', validAverage
-        ? (isBn ? `৫-এর মধ্যে ${localizedAverage}` : `${average.toFixed(1)} out of 5`)
-        : labels.ratingUnavailable);
-      if (ratingText) ratingText.textContent = validAverage
-        ? (isBn ? `৫-এর মধ্যে ${localizedAverage} · গুগল বিজনেস রেটিং` : `${average.toFixed(1)} out of 5 · Google Business rating`)
-        : labels.ratingUnavailable;
-      if (countText) countText.textContent = `${new Intl.NumberFormat(isBn ? 'bn-IN' : 'en-IN').format(totalReviewCount)} ${labels.count}`;
-      if (countBadge) countBadge.textContent = `${isBn ? 'গুগল রিভিউ' : 'Google Reviews'} (${new Intl.NumberFormat(isBn ? 'bn-IN' : 'en-IN').format(totalReviewCount)})`;
+    function updateSummary(reviews) {
+      const totalReviewCount = reviews.length;
+      const average = totalReviewCount
+        ? reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviewCount
+        : null;
+      const numberFormat = new Intl.NumberFormat(isBn ? 'bn-IN' : 'en-IN');
+      const localizedAverage = average === null
+        ? ''
+        : new Intl.NumberFormat(isBn ? 'bn-IN' : 'en-IN', { maximumFractionDigits: 1 }).format(average);
+      if (averageElement) averageElement.textContent = localizedAverage || '—';
+      if (starsElement) starsElement.textContent = average === null ? '' : '★'.repeat(Math.round(average));
+      if (starsElement) starsElement.setAttribute('aria-label', average === null
+        ? labels.ratingUnavailable
+        : (isBn ? `৫-এর মধ্যে ${localizedAverage}` : `${average.toFixed(1)} out of 5`));
+      if (ratingText) ratingText.textContent = average === null
+        ? labels.ratingUnavailable
+        : (isBn ? `৫-এর মধ্যে ${localizedAverage} · গ্রাহক রেটিং` : `${average.toFixed(1)} out of 5 · Customer rating`);
+      if (countText) countText.textContent = `${numberFormat.format(totalReviewCount)} ${labels.count}`;
+      if (countBadge) countBadge.textContent = `${isBn ? 'গ্রাহক রিভিউ' : 'Customer Reviews'} (${numberFormat.format(totalReviewCount)})`;
     }
 
     function renderReviews(reviews) {
@@ -732,63 +745,171 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       reviewsGrid.innerHTML = reviews.map((review, index) => {
-        const authorName = review.reviewerName || labels.anonymous;
+        const authorName = isBn ? (review.name_bn || review.name) : review.name;
         const author = escapeHtml(authorName);
-        const initial = escapeHtml(Array.from(authorName.trim())[0] || 'G');
-        const comment = escapeHtml(review.comment || (isBn ? 'লিখিত মন্তব্য নেই।' : 'No written comment.'));
-        const rating = ratingValue(review.starRating);
-        const date = escapeHtml(formatDate(review.updateTime || review.createTime));
+        const initials = authorName.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join('');
+        const initial = escapeHtml(initials || 'C');
+        const comment = escapeHtml(isBn ? (review.text_bn || review.text) : review.text);
+        const rating = review.rating;
+        const time = escapeHtml(isBn ? (review.time_bn || review.time) : review.time);
+        const location = typeof review.location === 'string' && review.location.trim()
+          ? `<div class="review-location">${escapeHtml(review.location)}</div>`
+          : '';
+        const avatarColor = ['teal', 'coral', 'navy', 'green'].includes(review.color) ? review.color : 'teal';
+        const orderTag = review.order_tag
+          ? escapeHtml(review.order_tag)
+          : escapeHtml(labels.customerReview);
         const stars = '★'.repeat(rating);
         const delay = Math.min(index, 8) * 40;
         return `
-          <article class="review-card fade-in" style="animation-delay: ${delay}ms;" data-id="${escapeHtml(review.reviewId)}">
+          <article class="review-card fade-in" style="animation-delay: ${delay}ms;" data-id="${review.id}">
             <div>
               <div class="review-top">
                 <div class="review-author">
-                  <div class="review-avatar avatar-teal">${initial}</div>
-                  <div class="review-name">${author}</div>
+                  <div class="review-avatar avatar-${avatarColor}">${initial}</div>
+                  <div>
+                    <div class="review-name">${author}</div>
+                    ${location}
+                  </div>
                 </div>
-                <i class="fab fa-google review-google-icon" title="Google" aria-hidden="true"></i>
               </div>
               <div class="review-rating-row">
                 <div class="review-stars" aria-label="${rating} ${isBn ? 'স্টার' : 'stars'}">${stars}</div>
-                <span class="review-badge">${labels.source}</span>
+                <span class="review-badge">${escapeHtml(review.verified ? labels.verifiedCustomer : labels.customerReview)}</span>
               </div>
-              <p class="review-quote">${comment}</p>
+              <p class="review-quote">“${comment}”</p>
             </div>
             <div class="review-footer">
-              <span class="review-order-tag">${labels.source}</span>
-              <span class="review-date">${date}</span>
+              <span class="review-order-tag">${orderTag}</span>
+              <span class="review-date">${time}</span>
             </div>
           </article>`;
       }).join('');
     }
 
-    async function loadGoogleReviews() {
+    function updateRotationControl() {
+      if (!rotationToggle) return;
+      const canRotate = allReviews.length > pageSize;
+      rotationToggle.hidden = !canRotate;
+      rotationToggle.setAttribute('aria-pressed', String(rotationPaused));
+      rotationToggle.setAttribute('aria-label', rotationPaused ? labels.resumeRotation : labels.pauseRotation);
+      if (rotationLabel) rotationLabel.textContent = rotationPaused ? labels.resumeRotation : labels.pauseRotation;
+      if (rotationIcon) rotationIcon.className = `fas ${rotationPaused ? 'fa-play' : 'fa-pause'}`;
+    }
+
+    function visibleReviewCount() {
+      const columns = getComputedStyle(reviewsGrid).gridTemplateColumns.trim().split(/\s+/).length;
+      return Math.max(1, columns) * 2;
+    }
+
+    function renderCurrentReviewPage(animate = false) {
+      if (renderTimer) window.clearTimeout(renderTimer);
+      const render = () => {
+        const start = pageIndex * pageSize;
+        renderReviews(allReviews.slice(start, start + pageSize));
+        reviewsGrid.classList.remove('interchanging');
+      };
+
+      if (animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        reviewsGrid.classList.add('interchanging');
+        renderTimer = window.setTimeout(render, 220);
+      } else {
+        render();
+      }
+    }
+
+    function scheduleRotation() {
+      window.clearInterval(rotationTimer);
+      updateRotationControl();
+      if (
+        rotationPaused
+        || interactionPaused
+        || document.hidden
+        || allReviews.length <= pageSize
+      ) return;
+
+      rotationTimer = window.setInterval(() => {
+        const pageCount = Math.ceil(allReviews.length / pageSize);
+        pageIndex = (pageIndex + 1) % pageCount;
+        renderCurrentReviewPage(true);
+      }, ROTATION_INTERVAL_MS);
+    }
+
+    function updatePageSize() {
+      const nextPageSize = visibleReviewCount();
+      if (nextPageSize === pageSize) return;
+      pageSize = nextPageSize;
+      pageIndex = Math.min(pageIndex, Math.max(0, Math.ceil(allReviews.length / pageSize) - 1));
+      renderCurrentReviewPage();
+      scheduleRotation();
+    }
+
+    rotationToggle?.addEventListener('click', () => {
+      rotationPaused = !rotationPaused;
+      scheduleRotation();
+    });
+    reviewsGrid.addEventListener('mouseenter', () => {
+      interactionPaused = true;
+      scheduleRotation();
+    });
+    reviewsGrid.addEventListener('mouseleave', () => {
+      interactionPaused = false;
+      scheduleRotation();
+    });
+    reviewsGrid.addEventListener('focusin', () => {
+      interactionPaused = true;
+      scheduleRotation();
+    });
+    reviewsGrid.addEventListener('focusout', event => {
+      if (!reviewsGrid.contains(event.relatedTarget)) {
+        interactionPaused = false;
+        scheduleRotation();
+      }
+    });
+    document.addEventListener('visibilitychange', scheduleRotation);
+    window.addEventListener('resize', () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(updatePageSize, 120);
+    });
+
+    async function loadCustomerReviews() {
       reviewsGrid.setAttribute('aria-busy', 'true');
       reviewsGrid.textContent = labels.loading;
       try {
         const response = await fetch('/api/reviews', { cache: 'no-store' });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || labels.error);
-        if (!Array.isArray(data.reviews)) throw new Error('The Google reviews response is invalid.');
+        if (!response.ok) throw new Error(`Reviews file returned HTTP ${response.status}.`);
+        const reviews = await response.json();
+        if (!Array.isArray(reviews) || reviews.some(review =>
+          !review
+          || !Number.isInteger(review.id)
+          || typeof review.name !== 'string'
+          || !review.name.trim()
+          || !Number.isInteger(review.rating)
+          || review.rating < 1
+          || review.rating > 5
+          || typeof review.text !== 'string'
+          || !review.text.trim()
+          || typeof review.time !== 'string'
+          || !review.time.trim()
+        )) {
+          throw new Error('The customer reviews file has an invalid format.');
+        }
 
-        const reviews = data.reviews.slice().sort((left, right) =>
-          new Date(right.updateTime || right.createTime || 0) - new Date(left.updateTime || left.createTime || 0)
-        );
-        updateRating(data.averageRating, data.totalReviewCount ?? reviews.length);
-        renderReviews(reviews);
+        allReviews = reviews;
+        updateSummary(reviews);
+        pageSize = visibleReviewCount();
+        renderCurrentReviewPage();
+        scheduleRotation();
         if (statusText) statusText.textContent = labels.loaded;
       } catch (error) {
-        console.error('Unable to display Google reviews:', error);
+        console.error('Unable to display customer reviews:', error);
         reviewsGrid.setAttribute('aria-busy', 'false');
         reviewsGrid.textContent = labels.error;
         if (statusText) statusText.textContent = labels.error;
-        if (countText) countText.textContent = labels.error;
       }
     }
 
-    loadGoogleReviews();
+    loadCustomerReviews();
   }
 
   // --- 8. Execution ---
@@ -796,5 +917,5 @@ document.addEventListener('DOMContentLoaded', function () {
   initImageCarousels();
   initCatalogueFiltering();
   initSmoothScrolling();
-  initGoogleReviews();
+  initCustomerReviews();
 });

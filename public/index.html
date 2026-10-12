@@ -501,24 +501,24 @@
             </div>
         </section>
 
-        <!-- Customer Reviews & Google Rating Section -->
-        <section id="reviews" class="reviews-section" aria-label="Customer Reviews and Google Ratings">
+        <!-- Customer Reviews Section -->
+        <section id="reviews" class="reviews-section" aria-label="Customer Reviews and Ratings">
             <div class="container">
                 <div class="section-header">
-                    <span class="section-tag"><i class="fab fa-google" style="color: #4285f4; margin-right: 0.35rem;"></i> Verified Google Reviews</span>
+                    <span class="section-tag">Customer Reviews</span>
                     <h2 class="section-title">What Our Customers Say</h2>
                     <p class="section-subtitle">Real feedback from crab lovers across Greater Kolkata enjoying our fresh Sundarban catch</p>
                 </div>
 
-                <!-- Google Rating Summary Header -->
+                <!-- Customer Rating Summary -->
                 <div class="reviews-summary-card">
                     <div class="reviews-rating-overall">
-                        <div class="overall-score-badge" id="googleReviewAverage">—</div>
+                        <div class="overall-score-badge" id="customerReviewAverage">—</div>
                         <div>
-                            <div class="overall-stars" id="googleReviewStars" aria-label="Google rating"></div>
+                            <div class="overall-stars" id="customerReviewStars" aria-label="Customer rating"></div>
                             <div class="overall-meta">
-                                <span id="googleReviewRatingText">Google Business rating</span>
-                                <span id="googleReviewCount">Loading Google reviews…</span>
+                                <span id="customerReviewRatingText">Customer rating</span>
+                                <span id="customerReviewCount">Loading customer reviews…</span>
                             </div>
                         </div>
                     </div>
@@ -535,24 +535,24 @@
                     </div>
                 </div>
 
-                <!-- Streamlined Reviews Controls -->
+                <!-- Reviews Actions -->
                 <div class="reviews-controls-bar">
                     <div class="reviews-filter-pills">
-                        <span class="review-pill active" id="reviewsCountBadge">Google Reviews</span>
+                        <span class="review-pill active" id="reviewsCountBadge">Customer Reviews</span>
                     </div>
 
                     <div class="reviews-actions-group">
-                        <a class="btn-review-action" href="https://www.google.com/search?kgmid=%2Fg%2F11zxnvxl2q&amp;hl=en-IN&amp;q=Baidya+crab+house#lrd=0x3a02717e220b0e7b:0x607acd8871267750,1,,,," target="_blank" rel="noopener noreferrer">
-                            <i class="fab fa-google" aria-hidden="true"></i> <span>View on Google</span>
-                        </a>
+                        <button type="button" class="btn-review-action btn-rotation" id="reviewsRotationToggle" aria-pressed="false" hidden>
+                            <i class="fas fa-pause" aria-hidden="true"></i> <span>Pause rotation</span>
+                        </button>
                         <a class="btn-review-action btn-write" href="https://g.page/r/CVB3JnGIzXpgEBM/review" target="_blank" rel="noopener noreferrer">
-                            <i class="fas fa-pen" aria-hidden="true"></i> <span>Write Review</span>
+                            <i class="fas fa-pen" aria-hidden="true"></i> <span>Write a Review</span>
                         </a>
                     </div>
                 </div>
 
                 <!-- Reviews Grid -->
-                <div class="reviews-grid" id="reviewsGridContainer" aria-live="polite" aria-busy="true">Loading reviews from Google…</div>
+                <div class="reviews-grid" id="reviewsGridContainer" aria-live="off" aria-busy="true">Loading customer reviews…</div>
                 <p id="reviewsStatusText" class="review-status" role="status" aria-live="polite"></p>
             </div>
         </section>

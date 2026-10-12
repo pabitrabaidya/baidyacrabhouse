@@ -1369,7 +1369,7 @@ html[lang="bn"] .page-hero p {
   color: #ffffff;
 }
 
-/* ── Google Reviews & Map Badges ── */
+/* ── Customer Reviews & Map Badges ── */
 .google-reviews-bar {
   display: inline-flex;
   align-items: center;
@@ -1698,6 +1698,16 @@ html[lang="bn"] .page-hero p {
   background: #0a6f44;
   color: #ffffff;
   transform: translateY(-1px);
+}
+
+.btn-review-action.btn-rotation {
+  background: #0f5c7e;
+  color: #ffffff;
+  border-color: #0f5c7e;
+}
+.btn-review-action.btn-rotation:hover {
+  background: #0a3d54;
+  color: #ffffff;
 }
 
 /* ── Review Cards Animation when Reloaded or Interchanged ── */
@@ -2039,6 +2049,421 @@ html[lang="bn"] .page-hero p {
   }
 }
 
+/* ── Admin dashboard screenshot layout ── */
+.admin-shell {
+  width: min(1160px, calc(100% - 2rem));
+  margin: 0 auto 3rem;
+}
+.admin-header {
+  position: relative;
+  width: 100vw;
+  min-height: 88px;
+  margin: 0 0 2rem calc((min(1160px, 100vw - 2rem) - 100vw) / 2);
+  padding: 1rem max(calc((100vw - 1160px) / 2), 1rem);
+  background: #07192f;
+  border-bottom: 1px solid #334155;
+}
+.admin-brand,
+.admin-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+.admin-brand-logo,
+.admin-login-logo {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  overflow: hidden;
+  background: #0b3d91;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+}
+.admin-brand-logo {
+  width: 44px;
+  height: 44px;
+}
+.admin-brand-logo img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+.admin-eyebrow {
+  display: none;
+}
+.admin-header h1 {
+  margin: 0;
+  color: #f8fafc;
+  font-size: clamp(1rem, 2.2vw, 1.35rem);
+  white-space: nowrap;
+}
+.admin-private-tag {
+  padding: 0.25rem 0.55rem;
+  color: #fb7185;
+  background: rgba(220, 76, 40, 0.15);
+  border: 1px solid rgba(220, 76, 40, 0.45);
+  border-radius: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.admin-header-actions .btn {
+  min-height: 2.7rem;
+}
+.admin-preview {
+  color: #38bdf8;
+  border-color: #0e7490;
+}
+.admin-logout {
+  color: #fb7185;
+  border-color: #7f1d1d;
+}
+.admin-page [hidden] {
+  display: none !important;
+}
+.admin-page .admin-login-panel {
+  width: min(525px, 100%);
+  margin: 2.5rem auto;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  text-align: center;
+}
+.admin-login-logo {
+  width: 86px;
+  height: 86px;
+  margin: 0 auto 1.2rem;
+  border: 2px solid rgba(220, 76, 40, 0.55);
+  box-shadow: 0 0 0 7px rgba(220, 76, 40, 0.08);
+}
+.admin-login-logo img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+.admin-page .admin-login-panel h2 {
+  margin: 0;
+  font-size: 1.7rem;
+}
+.admin-login-subtitle {
+  margin: 0.35rem 0 1.5rem;
+  color: #94a3b8;
+}
+.admin-login-panel form {
+  max-width: none;
+  text-align: left;
+}
+.admin-login-panel form > label:first-child {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.admin-login-panel input[type="password"] {
+  min-height: 3.45rem;
+  color: #f8fafc;
+  background: #0f172a;
+  border: 1px solid #475569;
+}
+.admin-login-panel .admin-remember {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+.admin-login-panel .admin-remember input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--coral-accent);
+}
+.admin-login-panel form .btn {
+  width: 100%;
+  min-height: 3.35rem;
+  justify-self: stretch;
+  font-size: 1.05rem;
+}
+.admin-login-hint {
+  margin: 1.25rem 0 0;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+.admin-login-panel .admin-status {
+  text-align: left;
+}
+.admin-tab-nav {
+  gap: 0.75rem;
+  margin: 0 0 1.4rem;
+  padding: 0 0 0.8rem;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #334155;
+  border-radius: 0;
+}
+.admin-tab-btn {
+  min-height: 3.1rem;
+  padding: 0.7rem 1.15rem;
+}
+.admin-tab-btn.active {
+  background: #12375e;
+  border-color: #0e7490;
+}
+.admin-page #adminPricesPanel,
+.admin-page #adminReviewsPanel {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.admin-price-control-strip {
+  display: grid;
+  gap: 1.3rem;
+  margin-bottom: 1.5rem;
+  padding: 1.4rem 1.6rem;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: var(--radius-lg);
+}
+.admin-date-control,
+.admin-bulk-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+.admin-date-control label,
+.admin-bulk-actions > span {
+  color: #94a3b8;
+  font-weight: 700;
+}
+.admin-date-control input {
+  min-height: 2.8rem;
+  padding: 0.5rem 0.75rem;
+  color: #f8fafc;
+  color-scheme: dark;
+  background: #0f172a;
+  border: 1px solid #475569;
+  border-radius: var(--radius-sm);
+  font: inherit;
+}
+.admin-bulk-actions .btn-chip,
+.admin-grade-quick-actions .btn-chip {
+  min-height: 2.25rem;
+  padding: 0.35rem 0.75rem;
+  color: #cbd5e1;
+  background: #0f172a;
+  border: 1px solid #475569;
+  border-radius: 0.45rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.admin-bulk-actions .btn-chip:hover,
+.admin-grade-quick-actions .btn-chip:hover {
+  color: #fff;
+  border-color: #38bdf8;
+}
+.admin-updated {
+  margin: -0.75rem 0 0.75rem;
+}
+.admin-product-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-top: 0;
+}
+.admin-product {
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: var(--radius-lg);
+}
+.admin-product-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 6.4rem;
+  padding: 1.25rem;
+  background: #273549;
+  border-bottom: 1px solid #334155;
+}
+.admin-product-heading h3 {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 1.1rem;
+  line-height: 1.35;
+}
+.admin-product-heading p {
+  margin: 0.25rem 0 0;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+.admin-stock-toggle {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0;
+  color: #10b981;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+.admin-stock-toggle.is-out-of-stock {
+  color: #fb7185;
+}
+.admin-stock-toggle input {
+  position: relative;
+  width: 3.25rem;
+  height: 1.7rem;
+  margin: 0;
+  appearance: none;
+  background: #475569;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.admin-stock-toggle input::after {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 1.2rem;
+  height: 1.2rem;
+  content: "";
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.15s ease;
+}
+.admin-stock-toggle input:checked {
+  background: #059669;
+}
+.admin-stock-toggle input:checked::after {
+  transform: translateX(1.48rem);
+}
+.admin-stock-toggle input:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
+}
+.admin-price-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+.admin-price-summary > div {
+  display: grid;
+  gap: 0.45rem;
+}
+.admin-price-summary > div > span,
+.admin-grade-heading > strong {
+  color: #94a3b8;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+.admin-price-summary > div > strong {
+  display: block;
+  padding: 0.65rem 0.75rem;
+  color: #f8fafc;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+}
+.admin-grade-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin: 0 1.25rem;
+  padding: 1.1rem 0 1.25rem;
+  border-top: 1px dashed #334155;
+}
+.admin-grade-heading {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.admin-grade-quick-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+.admin-grade-quick-actions .btn-chip {
+  min-height: 1.9rem;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+}
+.admin-grade-field > span:first-child {
+  margin-bottom: 0.35rem;
+  font-size: 0.8rem;
+}
+.admin-price-field {
+  background: #0f172a;
+}
+.admin-grade-price {
+  min-height: 2.4rem;
+  padding: 0.5rem;
+  font-weight: 700;
+}
+.admin-save-row {
+  margin: 1.25rem 0;
+  padding: 1rem;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: var(--radius-lg);
+}
+.admin-page .admin-status.error {
+  color: #fca5a5;
+}
+.admin-page .admin-login-panel,
+.admin-page #adminSetup {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+@media (max-width: 760px) {
+  .admin-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: 0.9rem 1rem;
+  }
+  .admin-header-actions {
+    align-self: flex-end;
+  }
+  .admin-product-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .admin-shell {
+    width: calc(100% - 1rem);
+  }
+  .admin-header h1 {
+    white-space: normal;
+  }
+  .admin-private-tag {
+    display: none;
+  }
+  .admin-header-actions .btn {
+    padding: 0.55rem 0.65rem;
+    font-size: 0.82rem;
+  }
+  .admin-price-control-strip {
+    padding: 1rem;
+  }
+  .admin-date-control input {
+    flex: 1 1 10rem;
+  }
+  .admin-grade-grid {
+    margin-right: 0.8rem;
+    margin-left: 0.8rem;
+  }
+}
+
 @media (max-width: 360px) {
   .navbar,
   html[lang="bn"] .navbar {
@@ -2056,7 +2481,16 @@ html[lang="bn"] .page-hero p {
 
 /* ── Admin Price & Inventory Page ── */
 .admin-page {
-  background: var(--bg-page);
+  background: #0f172a;
+  color: #f8fafc;
+  --bg-surface: #1e293b;
+  --border-light: #334155;
+  --border-medium: #475569;
+  --navy-dark: #f8fafc;
+  --text-main: #e2e8f0;
+  --text-muted: #94a3b8;
+  --teal-accent: #38bdf8;
+  --coral-accent: #fb7185;
 }
 .admin-page [hidden] {
   display: none !important;
@@ -2205,6 +2639,290 @@ html[lang="bn"] .page-hero p {
 .admin-logout {
   flex-shrink: 0;
 }
+.admin-tab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  padding: 0.5rem;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: var(--radius-lg);
+}
+.admin-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.8rem;
+  padding: 0.65rem 1rem;
+  color: #cbd5e1;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.admin-tab-btn.active {
+  color: #fff;
+  background: #334155;
+  border-color: #475569;
+}
+.admin-tab-btn > span:first-child {
+  color: #fbbf24;
+  font-weight: 800;
+}
+.admin-tab-badge {
+  display: inline-grid;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  place-items: center;
+  padding: 0 0.35rem;
+  color: #dbeafe;
+  background: #0f5c7e;
+  border-radius: 999px;
+  font-size: 0.75rem;
+}
+.admin-panel {
+  background: #1e293b;
+  border-color: #334155;
+}
+.admin-panel h2,
+.admin-panel-heading h2,
+.admin-review-list-heading h2 {
+  color: #f8fafc;
+}
+.admin-header h1 {
+  color: #f8fafc;
+}
+.admin-header p,
+.admin-panel > p,
+.admin-panel-heading p {
+  color: #94a3b8;
+}
+.admin-product,
+.admin-review-editor,
+.admin-review-item {
+  background: #172235;
+  border-color: #334155;
+}
+.admin-product legend,
+.admin-stock-toggle,
+.admin-grade-field > span:first-child,
+.admin-review-field,
+.admin-review-item h3 {
+  color: #e2e8f0;
+}
+.admin-grade-price,
+.admin-login-panel input,
+.admin-review-field input,
+.admin-review-field select,
+.admin-review-field textarea {
+  color: #f8fafc;
+  background: #0f172a;
+  border-color: #475569;
+}
+.admin-price-field {
+  border-color: #475569;
+}
+.admin-price-field > span {
+  color: #94a3b8;
+}
+.admin-status {
+  color: #34d399;
+}
+.admin-status.error {
+  color: #fca5a5;
+}
+.admin-review-editor {
+  margin-top: 1.25rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border: 1px solid #334155;
+  border-radius: var(--radius-lg);
+}
+.review-stats-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem;
+  background: #172235;
+  border: 1px solid #334155;
+  border-radius: var(--radius-lg);
+}
+.review-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.review-stat-icon {
+  display: grid;
+  width: 2.6rem;
+  height: 2.6rem;
+  place-items: center;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.13);
+  border-radius: 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+.review-stat-icon-count {
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.15);
+}
+.review-stat-item strong,
+.review-stat-item div > span {
+  display: block;
+}
+.review-stat-item strong {
+  color: #f8fafc;
+  font-size: 1.1rem;
+}
+.review-stat-item div > span {
+  margin-top: 0.15rem;
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+.admin-review-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.admin-review-field {
+  display: grid;
+  align-content: start;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+.admin-review-field b {
+  color: #fb7185;
+}
+.admin-review-field input,
+.admin-review-field select,
+.admin-review-field textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid #475569;
+  border-radius: var(--radius-sm);
+  font: inherit;
+}
+.admin-review-field textarea {
+  resize: vertical;
+}
+.admin-review-field-wide {
+  grid-column: 1 / -1;
+}
+.admin-review-verified {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  align-self: end;
+  min-height: 2.7rem;
+  color: #cbd5e1;
+  font-size: 0.85rem;
+}
+.admin-review-verified input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: #10b981;
+}
+.admin-review-save-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #334155;
+}
+.admin-review-list-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1.75rem 0 0.85rem;
+}
+.admin-review-list-heading h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+.admin-review-list-heading > span,
+.admin-review-item-heading p {
+  color: #94a3b8;
+  font-size: 0.825rem;
+}
+.admin-reviews-list {
+  display: grid;
+  gap: 0.75rem;
+}
+.admin-review-item {
+  padding: 1rem;
+  border: 1px solid #334155;
+  border-radius: var(--radius-md);
+}
+.admin-review-item-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.admin-review-item-heading h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+.admin-review-item-heading p {
+  margin: 0.2rem 0 0;
+}
+.admin-review-item-heading .review-stars {
+  flex-shrink: 0;
+}
+.admin-review-quote {
+  margin: 0.75rem 0;
+  color: #e2e8f0;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.admin-review-item-tags,
+.admin-review-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.admin-review-item-tags > span {
+  padding: 0.25rem 0.55rem;
+  color: #bae6fd;
+  background: rgba(14, 116, 144, 0.25);
+  border-radius: 999px;
+  font-size: 0.75rem;
+}
+.admin-review-item-actions {
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+}
+.admin-review-item-actions .btn {
+  padding: 0.45rem 0.75rem;
+}
+.admin-delete-review {
+  color: #fecaca;
+  background: #7f1d1d;
+}
+.admin-delete-review:hover {
+  background: #991b1b;
+}
+.admin-review-empty {
+  margin: 0;
+  padding: 1.5rem;
+  color: #94a3b8;
+  text-align: center;
+  background: #172235;
+  border: 1px dashed #475569;
+  border-radius: var(--radius-md);
+}
 .admin-page button:disabled {
   cursor: wait;
   opacity: 0.65;
@@ -2216,8 +2934,135 @@ html[lang="bn"] .page-hero p {
   }
   .admin-header,
   .admin-panel-heading,
-  .admin-save-row {
+  .admin-save-row,
+  .admin-review-save-row {
     align-items: flex-start;
     flex-direction: column;
+  }
+  .admin-review-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .admin-review-field-wide {
+    grid-column: auto;
+  }
+  .review-stats-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .admin-review-list-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+.admin-shell {
+  width: min(1160px, calc(100% - 2rem));
+  margin: 0 auto 3rem;
+}
+.admin-header {
+  box-sizing: border-box;
+  width: calc(100% + 2rem);
+  min-height: 88px;
+  margin: 0 0 2rem -1rem;
+  padding: 1rem max(calc((100vw - 1160px) / 2), 1rem);
+  background: #07192f;
+  border-bottom: 1px solid #334155;
+}
+.admin-header h1 {
+  margin: 0;
+  color: #f8fafc;
+  font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+}
+.admin-page .admin-tab-nav {
+  margin: 0 0 1.4rem;
+  padding: 0 0 0.8rem;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #334155;
+  border-radius: 0;
+}
+.admin-page .admin-tab-btn {
+  min-height: 3.1rem;
+  padding: 0.7rem 1.15rem;
+}
+.admin-page .admin-tab-btn.active {
+  background: #12375e;
+  border-color: #0e7490;
+}
+.admin-page .btn.secondary {
+  color: #cbd5e1;
+  background: #1e293b;
+  border-color: #475569;
+}
+.admin-page .btn.secondary:hover {
+  color: #fff;
+  background: #273549;
+}
+.admin-page .admin-preview {
+  color: #38bdf8;
+  background: #0b263e;
+  border-color: #0e7490;
+}
+.admin-page .admin-logout {
+  color: #fb7185;
+  background: #241c2a;
+  border-color: #7f1d1d;
+}
+.admin-page .admin-date-control input {
+  color: #f8fafc;
+  background: #0f172a;
+  border-color: #475569;
+}
+.admin-page {
+  --coral-accent: #e34c21;
+  --coral-hover: #c43e1d;
+}
+.admin-page .admin-stock-toggle input {
+  flex: 0 0 3.25rem;
+  width: 3.25rem;
+  min-width: 3.25rem;
+  height: 1.7rem;
+  accent-color: #059669;
+  appearance: none;
+  background: #475569;
+  border: 2px solid transparent;
+  border-radius: 999px;
+}
+.admin-page .admin-stock-toggle input::after {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 1.2rem;
+  height: 1.2rem;
+  content: "";
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.15s ease;
+}
+.admin-page .admin-stock-toggle input:checked {
+  background: #059669;
+}
+.admin-page .admin-stock-toggle input:checked::after {
+  transform: translateX(1.48rem);
+}
+
+@media (max-width: 760px) {
+  .admin-header {
+    width: calc(100% + 2rem);
+    margin-left: -1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-shell {
+    width: calc(100% - 1rem);
+  }
+  .admin-header {
+    width: 100%;
+    margin-left: 0;
+    padding: 0.9rem 1rem;
+  }
+  .admin-header h1 {
+    font-size: 1rem;
   }
 }

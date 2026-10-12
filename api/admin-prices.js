@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     }
 
     try {
-      const prices = await savePrices(req.body?.products);
+      const prices = await savePrices(req.body?.products, req.body?.last_updated);
       return res.status(200).json({ success: true, prices });
     } catch (error) {
       if (error.statusCode === 503) {

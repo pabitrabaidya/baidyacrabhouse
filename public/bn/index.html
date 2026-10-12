@@ -502,24 +502,24 @@
             </div>
         </section>
 
-        <!-- Customer Reviews & Google Rating Section -->
-        <section id="reviews" class="reviews-section" aria-label="গ্রাহকদের মতামত ও গুগল রেটিং">
+        <!-- Customer Reviews Section -->
+        <section id="reviews" class="reviews-section" aria-label="গ্রাহকদের মতামত ও রেটিং">
             <div class="container">
                 <div class="section-header">
-                    <span class="section-tag"><i class="fab fa-google" style="color: #4285f4; margin-right: 0.35rem;"></i> Google ভেরিফাইড রিভিউ</span>
+                    <span class="section-tag">গ্রাহকদের রিভিউ</span>
                     <h2 class="section-title">আমাদের সম্মানিত ক্রেতাদের মতামত</h2>
                     <p class="section-subtitle">কলকাতা ও পার্শ্ববর্তী এলাকায় সুন্দরবনের আসল খাঁটি কাঁকড়া উপভোগকারী সন্তুষ্ট ক্রেতাদের বাস্তব অভিজ্ঞতা</p>
                 </div>
 
-                <!-- Google Rating Summary Header -->
+                <!-- Customer Rating Summary -->
                 <div class="reviews-summary-card">
                     <div class="reviews-rating-overall">
-                        <div class="overall-score-badge" id="googleReviewAverage">—</div>
+                        <div class="overall-score-badge" id="customerReviewAverage">—</div>
                         <div>
-                            <div class="overall-stars" id="googleReviewStars" aria-label="গুগল রেটিং"></div>
+                            <div class="overall-stars" id="customerReviewStars" aria-label="গ্রাহক রেটিং"></div>
                             <div class="overall-meta">
-                                <span id="googleReviewRatingText">গুগল বিজনেস রেটিং</span>
-                                <span id="googleReviewCount">গুগল রিভিউ লোড হচ্ছে…</span>
+                                <span id="customerReviewRatingText">গ্রাহক রেটিং</span>
+                                <span id="customerReviewCount">গ্রাহকদের রিভিউ লোড হচ্ছে…</span>
                             </div>
                         </div>
                     </div>
@@ -536,16 +536,16 @@
                     </div>
                 </div>
 
-                <!-- Streamlined Reviews Controls -->
+                <!-- Reviews Actions -->
                 <div class="reviews-controls-bar">
                     <div class="reviews-filter-pills">
-                        <span class="review-pill active" id="reviewsCountBadge">গুগল রিভিউ</span>
+                        <span class="review-pill active" id="reviewsCountBadge">গ্রাহকদের রিভিউ</span>
                     </div>
 
                     <div class="reviews-actions-group">
-                        <a class="btn-review-action" href="https://www.google.com/search?kgmid=%2Fg%2F11zxnvxl2q&amp;hl=en-IN&amp;q=Baidya+crab+house#lrd=0x3a02717e220b0e7b:0x607acd8871267750,1,,,," target="_blank" rel="noopener noreferrer">
-                            <i class="fab fa-google" aria-hidden="true"></i> <span>গুগলে দেখুন</span>
-                        </a>
+                        <button type="button" class="btn-review-action btn-rotation" id="reviewsRotationToggle" aria-pressed="false" hidden>
+                            <i class="fas fa-pause" aria-hidden="true"></i> <span>পরিবর্তন থামান</span>
+                        </button>
                         <a class="btn-review-action btn-write" href="https://g.page/r/CVB3JnGIzXpgEBM/review" target="_blank" rel="noopener noreferrer">
                             <i class="fas fa-pen" aria-hidden="true"></i> <span>রিভিউ লিখুন</span>
                         </a>
@@ -553,7 +553,7 @@
                 </div>
 
                 <!-- Reviews Grid -->
-                <div class="reviews-grid" id="reviewsGridContainer" aria-live="polite" aria-busy="true">গুগল থেকে রিভিউ লোড হচ্ছে…</div>
+                <div class="reviews-grid" id="reviewsGridContainer" aria-live="off" aria-busy="true">গ্রাহকদের রিভিউ লোড হচ্ছে…</div>
                 <p id="reviewsStatusText" class="review-status" role="status" aria-live="polite"></p>
             </div>
         </section>

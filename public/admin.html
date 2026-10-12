@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Price &amp; Inventory Admin | Baidya Crab House</title>
+    <title>Price, Inventory &amp; Reviews Admin | Baidya Crab House</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -12,41 +12,69 @@
 </head>
 <body class="admin-page">
     <main class="admin-shell">
-        <a class="admin-back-link" href="/products.html">&larr; Back to products</a>
         <header class="admin-header">
-            <div>
-                <span class="admin-eyebrow">BAIDYA CRAB HOUSE</span>
-                <h1>Price &amp; Inventory</h1>
-                <p>Update grade prices and stock status shown on both language versions.</p>
+            <div class="admin-brand">
+                <a class="admin-brand-logo" href="/" aria-label="Baidya Crab House home">
+                    <img src="images/logo.svg" alt="">
+                </a>
+                <div>
+                    <span class="admin-eyebrow">BAIDYA CRAB HOUSE</span>
+                    <h1>Rate &amp; Inventory Manager</h1>
+                </div>
+                <span class="admin-private-tag">Private Portal</span>
             </div>
-            <button type="button" class="btn secondary admin-logout" id="adminLogout" hidden>Sign out</button>
+            <div class="admin-header-actions">
+                <a class="btn secondary admin-preview" href="/" target="_blank" rel="noopener noreferrer">↗ <span>View Live Store</span></a>
+                <button type="button" class="btn secondary admin-logout" id="adminLogout" hidden>⇥ <span>Lock</span></button>
+            </div>
         </header>
 
         <section class="admin-panel" id="adminSetup" hidden>
             <h2>Admin setup required</h2>
-            <p>The server needs an admin password, session secret, and persistent price storage before this page can be used.</p>
+            <p>The server needs an admin password, session secret, and persistent storage before this page can be used.</p>
             <p>See the deployment setup instructions in the project README.</p>
         </section>
 
         <section class="admin-panel admin-login-panel" id="adminLoginPanel" hidden>
-            <h2>Sign in</h2>
-            <p>Enter the server-configured admin password to manage prices and inventory.</p>
+            <a class="admin-login-logo" href="/" aria-label="Baidya Crab House home"><img src="images/logo.svg" alt=""></a>
+            <h2>Baidya Crab House</h2>
+            <p class="admin-login-subtitle">Live Price &amp; Inventory Management Portal</p>
             <form id="adminLoginForm">
-                <label for="adminPassword">Admin password</label>
+                <label for="adminPassword">Manager Passcode / PIN</label>
                 <input id="adminPassword" name="password" type="password" autocomplete="current-password" required>
-                <button class="btn primary" type="submit">Sign in</button>
+                <label class="admin-remember"><input type="checkbox" id="adminRemember" checked> Remember on this device</label>
+                <button class="btn primary" type="submit">↪ &nbsp; Unlock Dashboard</button>
             </form>
             <p id="adminLoginStatus" class="admin-status" role="status" aria-live="polite"></p>
+            <p class="admin-login-hint">🔒 Private portal for Baidya Crab House management only.</p>
         </section>
 
+        <nav class="admin-tab-nav" id="adminNavigation" aria-label="Admin sections" hidden>
+            <button type="button" class="admin-tab-btn active" id="adminPricesTab" aria-selected="true">
+                <span aria-hidden="true">◆</span> Live Rates &amp; Stock
+            </button>
+            <button type="button" class="admin-tab-btn" id="adminReviewsTab" aria-selected="false">
+                <span aria-hidden="true">★</span> Customer Reviews
+                <span class="admin-tab-badge" id="adminReviewsBadge">0</span>
+            </button>
+        </nav>
+
         <section class="admin-panel" id="adminPricesPanel" hidden>
-            <div class="admin-panel-heading">
-                <div>
-                    <h2>Products</h2>
-                    <p>Prices are in Indian rupees per kilogram.</p>
+            <div class="admin-price-control-strip">
+                <div class="admin-date-control">
+                    <label for="priceVerificationDate">▦ Price Verification Date:</label>
+                    <input type="date" id="priceVerificationDate" required>
+                    <button type="button" class="btn secondary" id="setPriceDateToday">⚡ Set Today</button>
                 </div>
-                <span id="adminLastUpdated" class="admin-updated"></span>
+                <div class="admin-bulk-actions">
+                    <span>Quick Shift:</span>
+                    <button type="button" class="btn-chip" data-global-price-shift="50">+₹50 All</button>
+                    <button type="button" class="btn-chip" data-global-price-shift="-50">-₹50 All</button>
+                    <button type="button" class="btn-chip" data-global-price-shift="100">+₹100 All</button>
+                    <button type="button" class="btn-chip" id="setAllProductsInStock">All In-Stock</button>
+                </div>
             </div>
+            <p id="adminLastUpdated" class="admin-updated"></p>
             <form id="adminPricesForm">
                 <div id="adminProductList" class="admin-product-list"></div>
                 <div class="admin-save-row">
@@ -54,6 +82,95 @@
                     <button class="btn primary" type="submit" id="adminSaveButton">Save updates</button>
                 </div>
             </form>
+        </section>
+
+        <section class="admin-panel" id="adminReviewsPanel" hidden>
+            <div class="review-stats-card">
+                <div class="review-stat-item">
+                    <span class="review-stat-icon" aria-hidden="true">★</span>
+                    <div>
+                        <strong id="adminReviewAverage">—</strong>
+                        <span>Overall rating</span>
+                    </div>
+                </div>
+                <div class="review-stat-item">
+                    <span class="review-stat-icon review-stat-icon-count" aria-hidden="true">☰</span>
+                    <div>
+                        <strong id="adminReviewCount">0 reviews</strong>
+                        <span>Stored customer reviews</span>
+                    </div>
+                </div>
+                <button type="button" class="btn secondary" id="adminRefreshReviews">Refresh reviews</button>
+            </div>
+
+            <div class="admin-review-editor">
+                <div class="admin-panel-heading">
+                    <div>
+                        <h2 id="adminReviewFormHeading">Add customer review</h2>
+                        <p>Add the review text and optional Bengali translation and order details.</p>
+                    </div>
+                </div>
+                <form id="adminReviewForm">
+                    <div class="admin-review-form-grid">
+                        <label class="admin-review-field">
+                            <span>Customer name <b aria-hidden="true">*</b></span>
+                            <input name="name" maxlength="100" autocomplete="name" required>
+                        </label>
+                        <label class="admin-review-field">
+                            <span>Rating <b aria-hidden="true">*</b></span>
+                            <select name="rating" required>
+                                <option value="5">★★★★★ — 5 stars</option>
+                                <option value="4">★★★★ — 4 stars</option>
+                                <option value="3">★★★ — 3 stars</option>
+                                <option value="2">★★ — 2 stars</option>
+                                <option value="1">★ — 1 star</option>
+                            </select>
+                        </label>
+                        <label class="admin-review-field">
+                            <span>Time display <b aria-hidden="true">*</b></span>
+                            <input name="time" maxlength="100" value="Just now" required>
+                        </label>
+                        <label class="admin-review-field">
+                            <span>Location</span>
+                            <input name="location" maxlength="150" placeholder="e.g. New Town, Kolkata">
+                        </label>
+                        <label class="admin-review-field">
+                            <span>Order / product tag</span>
+                            <input name="order_tag" maxlength="120" placeholder="e.g. XL Live Mud Crabs">
+                        </label>
+                        <label class="admin-review-field">
+                            <span>Bengali customer name</span>
+                            <input name="name_bn" maxlength="100">
+                        </label>
+                        <label class="admin-review-field admin-review-field-wide">
+                            <span>Review text <b aria-hidden="true">*</b></span>
+                            <textarea name="text" maxlength="2000" rows="4" required></textarea>
+                        </label>
+                        <label class="admin-review-field admin-review-field-wide">
+                            <span>Bengali review text</span>
+                            <textarea name="text_bn" maxlength="2000" rows="4"></textarea>
+                        </label>
+                        <label class="admin-review-field">
+                            <span>Bengali time display</span>
+                            <input name="time_bn" maxlength="100" placeholder="e.g. এইমাত্র">
+                        </label>
+                        <label class="admin-review-verified">
+                            <input name="verified" type="checkbox">
+                            <span>Verified customer (only mark when confirmed)</span>
+                        </label>
+                    </div>
+                    <div class="admin-review-save-row">
+                        <p id="adminReviewStatus" class="admin-status" role="status" aria-live="polite"></p>
+                        <button type="submit" class="btn primary" id="adminReviewSaveButton">Save review</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="admin-review-list-heading">
+                <h2>Current customer reviews</h2>
+                <span>Visible on the English and Bengali storefronts</span>
+            </div>
+            <div id="adminReviewsList" class="admin-reviews-list" aria-live="polite"></div>
         </section>
     </main>
     <script src="admin.js" defer></script>
