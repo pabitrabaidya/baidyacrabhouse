@@ -44,17 +44,17 @@
       "id": "green_crab",
       "name": "Green Crab",
       "name_bn": "সবুজ কাঁকড়া",
-      "price": 650,
-      "starting_price": 550,
-      "price_range": "₹550 – ₹850",
+      "price": null,
+      "starting_price": null,
+      "price_range": "",
       "unit": " / kg",
       "unit_bn": " / কেজি",
       "in_stock": true,
       "grades": {
-        "S": 550,
-        "M": 650,
-        "L": 750,
-        "XL": 850
+        "GC1": null,
+        "GC2": null,
+        "GC3": null,
+        "GC4": null
       }
     },
     {

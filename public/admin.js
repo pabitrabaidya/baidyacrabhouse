@@ -150,8 +150,9 @@ document.addEventListener('DOMContentLoaded', () => {
         input.min = '1';
         input.max = '1000000';
         input.step = '1';
-        input.required = true;
-        input.value = String(price);
+        input.required = product.id !== 'green_crab';
+        input.value = price == null ? '' : String(price);
+        if (product.id === 'green_crab') input.placeholder = 'Set price';
         input.dataset.grade = grade;
         input.setAttribute('aria-label', `${product.name} ${grade} price in rupees`);
         input.addEventListener('input', () => updateProductSummary(card));
@@ -169,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function shiftProductPrices(card, delta) {
     card.querySelectorAll('.admin-grade-price').forEach(input => {
+      if (!input.value) return;
       const current = Number(input.value);
       input.value = String(Math.min(1_000_000, Math.max(1, (Number.isFinite(current) ? current : 1) + delta)));
     });
@@ -178,10 +180,14 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateProductSummary(card) {
     const prices = Array.from(card.querySelectorAll('.admin-grade-price'), input => Number(input.value))
       .filter(price => Number.isFinite(price) && price > 0);
-    if (!prices.length) return;
+    const amounts = card.querySelectorAll('.admin-price-summary strong');
+    if (!prices.length) {
+      amounts[0].textContent = '—';
+      amounts[1].textContent = '—';
+      return;
+    }
     const minimum = Math.min(...prices);
     const maximum = Math.max(...prices);
-    const amounts = card.querySelectorAll('.admin-price-summary strong');
     amounts[0].textContent = formatPrice(minimum);
     amounts[1].textContent = `${formatPrice(minimum)} – ${formatPrice(maximum)}`;
   }
@@ -394,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const products = Array.from(productList.querySelectorAll('.admin-product'), card => {
       const grades = {};
       card.querySelectorAll('.admin-grade-price').forEach(input => {
-        grades[input.dataset.grade] = Number(input.value);
+        grades[input.dataset.grade] = input.value === '' ? null : Number(input.value);
       });
       return {
         id: card.dataset.productId,

@@ -146,17 +146,17 @@ document.addEventListener('DOMContentLoaded', function () {
         id: 'green_crab',
         name: 'Green Crab',
         name_bn: 'সবুজ কাঁকড়া',
-        price: 650,
-        starting_price: 550,
-        price_range: '₹550 – ₹850',
+        price: null,
+        starting_price: null,
+        price_range: '',
         unit: ' / kg',
         unit_bn: ' / কেজি',
         in_stock: true,
         grades: {
-          S: 550,
-          M: 650,
-          L: 750,
-          XL: 850
+          GC1: null,
+          GC2: null,
+          GC3: null,
+          GC4: null
         }
       },
       {
@@ -294,7 +294,9 @@ document.addEventListener('DOMContentLoaded', function () {
           if (existingGrades.has(grade)) return;
           const option = document.createElement('option');
           option.value = grade;
-          option.textContent = `${grade} (${formatter.format(price)}${unitText})`;
+          option.textContent = price == null
+            ? `${grade} (Contact for price)`
+            : `${grade} (${formatter.format(price)}${unitText})`;
           gradeSelect.append(option);
         });
       }
@@ -370,12 +372,14 @@ document.addEventListener('DOMContentLoaded', function () {
           const selectedGrade = gradeSelect.value;
           const selectedOptionText = gradeSelect.options[gradeSelect.selectedIndex]?.text?.trim() || selectedGrade;
 
-          if (selectedGrade && p.grades && p.grades[selectedGrade] != null) {
+          if (selectedGrade && p.grades && Object.hasOwn(p.grades, selectedGrade)) {
             const gradePrice = p.grades[selectedGrade];
-            if (priceEl) {
+            if (priceEl && Number.isFinite(gradePrice)) {
               priceEl.textContent = `${formatter.format(gradePrice)}${unitText}`;
               priceEl.classList.add('price-highlight');
               setTimeout(() => priceEl.classList.remove('price-highlight'), 600);
+            } else if (priceEl) {
+              priceEl.textContent = isBengali ? 'আজকের রেট জানতে ক্লিক করুন' : 'Contact for today’s price';
             }
             if (orderBtnAnchor) {
               orderBtnAnchor.setAttribute('href', buildWhatsAppUrl(cardTitle, selectedOptionText, false));
@@ -383,12 +387,12 @@ document.addEventListener('DOMContentLoaded', function () {
           } else {
             // Revert to starting price
             if (priceEl) {
-              if (p.starting_price) {
+              if (p.starting_price != null) {
                 const formattedStart = formatter.format(p.starting_price);
                 priceEl.textContent = isBengali
                   ? `${formattedStart}${unitText} থেকে শুরু`
                   : `From ${formattedStart}${unitText}`;
-              } else if (p.price) {
+              } else if (p.price != null) {
                 priceEl.textContent = `${formatter.format(p.price)}${unitText}`;
               }
             }
